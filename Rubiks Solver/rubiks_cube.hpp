@@ -149,10 +149,11 @@ public:
 	void SetupCube();
 	bool ValidCube();
 	void Move(FaceId id, bool prime);
-	void PrintMoves();
+	void PrintMoves(const bool reverse);
 
 	// Solving functions
 	bool CrossSolved();
+	void SolveCrossEdge(PiecePosition current_position, PiecePosition wanted_position);
 	void SolveCross();
 
 	void Solve();

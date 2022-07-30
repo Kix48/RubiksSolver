@@ -11,7 +11,7 @@ int main()
     if (!cube->ValidCube())
     {
         MessageBoxA(nullptr, "Invalid cube colors!", "ERROR", MB_OK);
-        return -1;
+        std::quick_exit(-1);
     }
 
     cube->Solve();

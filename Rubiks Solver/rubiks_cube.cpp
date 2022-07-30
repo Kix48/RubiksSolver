@@ -197,7 +197,7 @@ CubeFace::~CubeFace()
 
 std::pair<int, int> CubeFace::GetDimensions()
 {
-	return { ARRAYSIZE(this->pieces), ARRAYSIZE(this->pieces[0]) };
+	return { static_cast<int>(ARRAYSIZE(this->pieces)), static_cast<int>(ARRAYSIZE(this->pieces[0])) };
 }
 
 void CubeFace::SetFaceId(FaceId new_id)
@@ -408,70 +408,70 @@ void RubiksCube::PrintCube()
 void RubiksCube::SetupCube()
 {
 	const auto u = this->GetFace(FaceId::UP);
-	u->SetPiece(0, 0, new CornerPiece(PieceColor::GREEN));
-	u->SetPiece(0, 1, new EdgePiece(PieceColor::ORANGE));
+	u->SetPiece(0, 0, new CornerPiece(PieceColor::YELLOW));
+	u->SetPiece(0, 1, new EdgePiece(PieceColor::BLUE));
 	u->SetPiece(0, 2, new CornerPiece(PieceColor::GREEN));
-	u->SetPiece(1, 0, new EdgePiece(PieceColor::YELLOW));
+	u->SetPiece(1, 0, new EdgePiece(PieceColor::GREEN));
 	u->SetPiece(1, 1, new MiddlePiece(PieceColor::WHITE));
-	u->SetPiece(1, 2, new EdgePiece(PieceColor::RED));
-	u->SetPiece(2, 0, new CornerPiece(PieceColor::ORANGE));
+	u->SetPiece(1, 2, new EdgePiece(PieceColor::BLUE));
+	u->SetPiece(2, 0, new CornerPiece(PieceColor::BLUE));
 	u->SetPiece(2, 1, new EdgePiece(PieceColor::ORANGE));
-	u->SetPiece(2, 2, new CornerPiece(PieceColor::BLUE));
+	u->SetPiece(2, 2, new CornerPiece(PieceColor::ORANGE));
 
 	const auto d = this->GetFace(FaceId::DOWN);
-	d->SetPiece(0, 0, new CornerPiece(PieceColor::RED));
+	d->SetPiece(0, 0, new CornerPiece(PieceColor::YELLOW));
 	d->SetPiece(0, 1, new EdgePiece(PieceColor::BLUE));
-	d->SetPiece(0, 2, new CornerPiece(PieceColor::WHITE));
-	d->SetPiece(1, 0, new EdgePiece(PieceColor::YELLOW));
+	d->SetPiece(0, 2, new CornerPiece(PieceColor::BLUE));
+	d->SetPiece(1, 0, new EdgePiece(PieceColor::GREEN));
 	d->SetPiece(1, 1, new MiddlePiece(PieceColor::YELLOW));
-	d->SetPiece(1, 2, new EdgePiece(PieceColor::GREEN));
-	d->SetPiece(2, 0, new CornerPiece(PieceColor::ORANGE));
-	d->SetPiece(2, 1, new EdgePiece(PieceColor::GREEN));
-	d->SetPiece(2, 2, new CornerPiece(PieceColor::GREEN));
+	d->SetPiece(1, 2, new EdgePiece(PieceColor::YELLOW));
+	d->SetPiece(2, 0, new CornerPiece(PieceColor::WHITE));
+	d->SetPiece(2, 1, new EdgePiece(PieceColor::WHITE));
+	d->SetPiece(2, 2, new CornerPiece(PieceColor::ORANGE));
 
 	const auto f = this->GetFace(FaceId::FRONT);
-	f->SetPiece(0, 0, new CornerPiece(PieceColor::GREEN));
-	f->SetPiece(0, 1, new EdgePiece(PieceColor::WHITE));
-	f->SetPiece(0, 2, new CornerPiece(PieceColor::RED));
-	f->SetPiece(1, 0, new EdgePiece(PieceColor::ORANGE));
+	f->SetPiece(0, 0, new CornerPiece(PieceColor::ORANGE));
+	f->SetPiece(0, 1, new EdgePiece(PieceColor::YELLOW));
+	f->SetPiece(0, 2, new CornerPiece(PieceColor::WHITE));
+	f->SetPiece(1, 0, new EdgePiece(PieceColor::GREEN));
 	f->SetPiece(1, 1, new MiddlePiece(PieceColor::RED));
-	f->SetPiece(1, 2, new EdgePiece(PieceColor::RED));
-	f->SetPiece(2, 0, new CornerPiece(PieceColor::BLUE));
-	f->SetPiece(2, 1, new EdgePiece(PieceColor::WHITE));
-	f->SetPiece(2, 2, new CornerPiece(PieceColor::ORANGE));
+	f->SetPiece(1, 2, new EdgePiece(PieceColor::BLUE));
+	f->SetPiece(2, 0, new CornerPiece(PieceColor::RED));
+	f->SetPiece(2, 1, new EdgePiece(PieceColor::ORANGE));
+	f->SetPiece(2, 2, new CornerPiece(PieceColor::YELLOW));
 
 	const auto b = this->GetFace(FaceId::BACK);
-	b->SetPiece(0, 0, new CornerPiece(PieceColor::ORANGE));
+	b->SetPiece(0, 0, new CornerPiece(PieceColor::WHITE));
 	b->SetPiece(0, 1, new EdgePiece(PieceColor::YELLOW));
-	b->SetPiece(0, 2, new CornerPiece(PieceColor::RED));
-	b->SetPiece(1, 0, new EdgePiece(PieceColor::GREEN));
+	b->SetPiece(0, 2, new CornerPiece(PieceColor::GREEN));
+	b->SetPiece(1, 0, new EdgePiece(PieceColor::ORANGE));
 	b->SetPiece(1, 1, new MiddlePiece(PieceColor::ORANGE));
-	b->SetPiece(1, 2, new EdgePiece(PieceColor::GREEN));
-	b->SetPiece(2, 0, new CornerPiece(PieceColor::YELLOW));
-	b->SetPiece(2, 1, new EdgePiece(PieceColor::YELLOW));
-	b->SetPiece(2, 2, new CornerPiece(PieceColor::YELLOW));
+	b->SetPiece(1, 2, new EdgePiece(PieceColor::WHITE));
+	b->SetPiece(2, 0, new CornerPiece(PieceColor::GREEN));
+	b->SetPiece(2, 1, new EdgePiece(PieceColor::RED));
+	b->SetPiece(2, 2, new CornerPiece(PieceColor::BLUE));
 
 	const auto l = this->GetFace(FaceId::LEFT);
-	l->SetPiece(0, 0, new CornerPiece(PieceColor::WHITE));
-	l->SetPiece(0, 1, new EdgePiece(PieceColor::RED));
+	l->SetPiece(0, 0, new CornerPiece(PieceColor::ORANGE));
+	l->SetPiece(0, 1, new EdgePiece(PieceColor::WHITE));
 	l->SetPiece(0, 2, new CornerPiece(PieceColor::YELLOW));
-	l->SetPiece(1, 0, new EdgePiece(PieceColor::WHITE));
+	l->SetPiece(1, 0, new EdgePiece(PieceColor::ORANGE));
 	l->SetPiece(1, 1, new MiddlePiece(PieceColor::GREEN));
-	l->SetPiece(1, 2, new EdgePiece(PieceColor::BLUE));
-	l->SetPiece(2, 0, new CornerPiece(PieceColor::BLUE));
-	l->SetPiece(2, 1, new EdgePiece(PieceColor::BLUE));
-	l->SetPiece(2, 2, new CornerPiece(PieceColor::WHITE));
+	l->SetPiece(1, 2, new EdgePiece(PieceColor::RED));
+	l->SetPiece(2, 0, new CornerPiece(PieceColor::RED));
+	l->SetPiece(2, 1, new EdgePiece(PieceColor::YELLOW));
+	l->SetPiece(2, 2, new CornerPiece(PieceColor::GREEN));
 
 	const auto r = this->GetFace(FaceId::RIGHT);
-	r->SetPiece(0, 0, new CornerPiece(PieceColor::YELLOW));
-	r->SetPiece(0, 1, new EdgePiece(PieceColor::BLUE));
-	r->SetPiece(0, 2, new CornerPiece(PieceColor::WHITE));
-	r->SetPiece(1, 0, new EdgePiece(PieceColor::WHITE));
+	r->SetPiece(0, 0, new CornerPiece(PieceColor::BLUE));
+	r->SetPiece(0, 1, new EdgePiece(PieceColor::WHITE));
+	r->SetPiece(0, 2, new CornerPiece(PieceColor::RED));
+	r->SetPiece(1, 0, new EdgePiece(PieceColor::RED));
 	r->SetPiece(1, 1, new MiddlePiece(PieceColor::BLUE));
-	r->SetPiece(1, 2, new EdgePiece(PieceColor::ORANGE));
-	r->SetPiece(2, 0, new CornerPiece(PieceColor::BLUE));
+	r->SetPiece(1, 2, new EdgePiece(PieceColor::GREEN));
+	r->SetPiece(2, 0, new CornerPiece(PieceColor::RED));
 	r->SetPiece(2, 1, new EdgePiece(PieceColor::RED));
-	r->SetPiece(2, 2, new CornerPiece(PieceColor::RED));
+	r->SetPiece(2, 2, new CornerPiece(PieceColor::WHITE));
 
 	reinterpret_cast<CornerPiece*>(u->GetPiece(0, 0))->SetOtherColors(b->GetPiece(0, 2)->GetColor(), l->GetPiece(0, 0)->GetColor());
 	reinterpret_cast<EdgePiece*>(u->GetPiece(0, 1))->SetOtherColor(b->GetPiece(0, 1)->GetColor());
@@ -598,18 +598,18 @@ void RubiksCube::Move(FaceId id, bool prime)
 	CubeFace* left_face = nullptr;
 	CubeFace* right_face = nullptr;
 
-	CubePiece* top_l = nullptr;
-	CubePiece* top_m = nullptr;
-	CubePiece* top_r = nullptr;
-	CubePiece* bottom_l = nullptr;
-	CubePiece* bottom_m = nullptr;
-	CubePiece* bottom_r = nullptr;
-	CubePiece* left_l = nullptr;
-	CubePiece* left_m = nullptr;
-	CubePiece* left_r = nullptr;
-	CubePiece* right_l = nullptr;
-	CubePiece* right_m = nullptr;
-	CubePiece* right_r = nullptr;
+	CornerPiece* top_l = nullptr;
+	EdgePiece* top_m = nullptr;
+	CornerPiece* top_r = nullptr;
+	CornerPiece* bottom_l = nullptr;
+	EdgePiece* bottom_m = nullptr;
+	CornerPiece* bottom_r = nullptr;
+	CornerPiece* left_l = nullptr;
+	EdgePiece* left_m = nullptr;
+	CornerPiece* left_r = nullptr;
+	CornerPiece* right_l = nullptr;
+	EdgePiece* right_m = nullptr;
+	CornerPiece* right_r = nullptr;
 
 	switch (id)
 	{
@@ -620,21 +620,21 @@ void RubiksCube::Move(FaceId id, bool prime)
 			left_face = this->GetFace(FaceId::LEFT);
 			right_face = this->GetFace(FaceId::RIGHT);
 
-			top_l = top_face->GetPiece(0, 0);
-			top_m = top_face->GetPiece(0, 1);
-			top_r = top_face->GetPiece(0, 2);
+			top_l = reinterpret_cast<CornerPiece*>(top_face->GetPiece(0, 0));
+			top_m = reinterpret_cast<EdgePiece*>( top_face->GetPiece(0, 1));
+			top_r = reinterpret_cast<CornerPiece*>(top_face->GetPiece(0, 2));
 
-			bottom_l = bottom_face->GetPiece(0, 0);
-			bottom_m = bottom_face->GetPiece(0, 1);
-			bottom_r = bottom_face->GetPiece(0, 2);
+			bottom_l = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(0, 0));
+			bottom_m = reinterpret_cast<EdgePiece*>( bottom_face->GetPiece(0, 1));
+			bottom_r = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(0, 2));
 
-			left_l = left_face->GetPiece(0, 0);
-			left_m = left_face->GetPiece(0, 1);
-			left_r = left_face->GetPiece(0, 2);
+			left_l = reinterpret_cast<CornerPiece*>(left_face->GetPiece(0, 0));
+			left_m = reinterpret_cast<EdgePiece*>( left_face->GetPiece(0, 1));
+			left_r = reinterpret_cast<CornerPiece*>(left_face->GetPiece(0, 2));
 
-			right_l = right_face->GetPiece(0, 0);
-			right_m = right_face->GetPiece(0, 1);
-			right_r = right_face->GetPiece(0, 2);
+			right_l = reinterpret_cast<CornerPiece*>(right_face->GetPiece(0, 0));
+			right_m = reinterpret_cast<EdgePiece*>( right_face->GetPiece(0, 1));
+			right_r = reinterpret_cast<CornerPiece*>(right_face->GetPiece(0, 2));
 			break;
 		}
 
@@ -645,21 +645,21 @@ void RubiksCube::Move(FaceId id, bool prime)
 			left_face = this->GetFace(FaceId::LEFT);
 			right_face = this->GetFace(FaceId::RIGHT);
 
-			top_l = top_face->GetPiece(2, 2);
-			top_m = top_face->GetPiece(2, 1);
-			top_r = top_face->GetPiece(2, 0);
+			top_l = reinterpret_cast<CornerPiece*>(top_face->GetPiece(2, 2));
+			top_m = reinterpret_cast<EdgePiece*>( top_face->GetPiece(2, 1));
+			top_r = reinterpret_cast<CornerPiece*>(top_face->GetPiece(2, 0));
 
-			bottom_l = bottom_face->GetPiece(2, 2);
-			bottom_m = bottom_face->GetPiece(2, 1);
-			bottom_r = bottom_face->GetPiece(2, 0);
+			bottom_l = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(2, 2));
+			bottom_m = reinterpret_cast<EdgePiece*>( bottom_face->GetPiece(2, 1));
+			bottom_r = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(2, 0));
 
-			left_l = left_face->GetPiece(2, 2);
-			left_m = left_face->GetPiece(2, 1);
-			left_r = left_face->GetPiece(2, 0);
+			left_l = reinterpret_cast<CornerPiece*>(left_face->GetPiece(2, 2));
+			left_m = reinterpret_cast<EdgePiece*>( left_face->GetPiece(2, 1));
+			left_r = reinterpret_cast<CornerPiece*>(left_face->GetPiece(2, 0));
 
-			right_l = right_face->GetPiece(2, 2);
-			right_m = right_face->GetPiece(2, 1);
-			right_r = right_face->GetPiece(2, 0);
+			right_l = reinterpret_cast<CornerPiece*>(right_face->GetPiece(2, 2));
+			right_m = reinterpret_cast<EdgePiece*>( right_face->GetPiece(2, 1));
+			right_r = reinterpret_cast<CornerPiece*>(right_face->GetPiece(2, 0));
 			break;
 		}
 
@@ -670,21 +670,21 @@ void RubiksCube::Move(FaceId id, bool prime)
 			left_face = this->GetFace(FaceId::LEFT);
 			right_face = this->GetFace(FaceId::RIGHT);
 
-			top_l = top_face->GetPiece(2, 2);
-			top_m = top_face->GetPiece(2, 1);
-			top_r = top_face->GetPiece(2, 0);
+			top_l = reinterpret_cast<CornerPiece*>(top_face->GetPiece(2, 2));
+			top_m = reinterpret_cast<EdgePiece*>( top_face->GetPiece(2, 1));
+			top_r = reinterpret_cast<CornerPiece*>(top_face->GetPiece(2, 0));
 
-			bottom_l = bottom_face->GetPiece(0, 0);
-			bottom_m = bottom_face->GetPiece(0, 1);
-			bottom_r = bottom_face->GetPiece(0, 2);
+			bottom_l = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(0, 0));
+			bottom_m = reinterpret_cast<EdgePiece*>( bottom_face->GetPiece(0, 1));
+			bottom_r = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(0, 2));
 
-			left_l = left_face->GetPiece(0, 2);
-			left_m = left_face->GetPiece(1, 2);
-			left_r = left_face->GetPiece(2, 2);
+			left_l = reinterpret_cast<CornerPiece*>(left_face->GetPiece(0, 2));
+			left_m = reinterpret_cast<EdgePiece*>( left_face->GetPiece(1, 2));
+			left_r = reinterpret_cast<CornerPiece*>(left_face->GetPiece(2, 2));
 
-			right_l = right_face->GetPiece(2, 0);
-			right_m = right_face->GetPiece(1, 0);
-			right_r = right_face->GetPiece(0, 0);
+			right_l = reinterpret_cast<CornerPiece*>(right_face->GetPiece(2, 0));
+			right_m = reinterpret_cast<EdgePiece*>( right_face->GetPiece(1, 0));
+			right_r = reinterpret_cast<CornerPiece*>(right_face->GetPiece(0, 0));
 			break;
 		}
 
@@ -695,21 +695,21 @@ void RubiksCube::Move(FaceId id, bool prime)
 			left_face = this->GetFace(FaceId::RIGHT);
 			right_face = this->GetFace(FaceId::LEFT);
 
-			top_l = top_face->GetPiece(0, 0);
-			top_m = top_face->GetPiece(0, 1);
-			top_r = top_face->GetPiece(0, 2);
+			top_l = reinterpret_cast<CornerPiece*>(top_face->GetPiece(0, 0));
+			top_m = reinterpret_cast<EdgePiece*>( top_face->GetPiece(0, 1));
+			top_r = reinterpret_cast<CornerPiece*>(top_face->GetPiece(0, 2));
 
-			bottom_l = bottom_face->GetPiece(2, 2);
-			bottom_m = bottom_face->GetPiece(2, 1);
-			bottom_r = bottom_face->GetPiece(2, 0);
+			bottom_l = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(2, 2));
+			bottom_m = reinterpret_cast<EdgePiece*>( bottom_face->GetPiece(2, 1));
+			bottom_r = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(2, 0));
 
-			left_l = left_face->GetPiece(0, 2);
-			left_m = left_face->GetPiece(1, 2);
-			left_r = left_face->GetPiece(2, 2);
+			left_l = reinterpret_cast<CornerPiece*>(left_face->GetPiece(0, 2));
+			left_m = reinterpret_cast<EdgePiece*>( left_face->GetPiece(1, 2));
+			left_r = reinterpret_cast<CornerPiece*>(left_face->GetPiece(2, 2));
 
-			right_l = right_face->GetPiece(2, 0);
-			right_m = right_face->GetPiece(1, 0);
-			right_r = right_face->GetPiece(0, 0);
+			right_l = reinterpret_cast<CornerPiece*>(right_face->GetPiece(2, 0));
+			right_m = reinterpret_cast<EdgePiece*>( right_face->GetPiece(1, 0));
+			right_r = reinterpret_cast<CornerPiece*>(right_face->GetPiece(0, 0));
 			break;
 		}
 
@@ -720,21 +720,21 @@ void RubiksCube::Move(FaceId id, bool prime)
 			left_face = this->GetFace(FaceId::BACK);
 			right_face = this->GetFace(FaceId::FRONT);
 
-			top_l = top_face->GetPiece(2, 0);
-			top_m = top_face->GetPiece(1, 0);
-			top_r = top_face->GetPiece(0, 0);
+			top_l = reinterpret_cast<CornerPiece*>(top_face->GetPiece(2, 0));
+			top_m = reinterpret_cast<EdgePiece*>( top_face->GetPiece(1, 0));
+			top_r = reinterpret_cast<CornerPiece*>(top_face->GetPiece(0, 0));
 
-			bottom_l = bottom_face->GetPiece(2, 0);
-			bottom_m = bottom_face->GetPiece(1, 0);
-			bottom_r = bottom_face->GetPiece(0, 0);
+			bottom_l = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(2, 0));
+			bottom_m = reinterpret_cast<EdgePiece*>( bottom_face->GetPiece(1, 0));
+			bottom_r = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(0, 0));
 
-			left_l = left_face->GetPiece(0, 2);
-			left_m = left_face->GetPiece(1, 2);
-			left_r = left_face->GetPiece(2, 2);
+			left_l = reinterpret_cast<CornerPiece*>(left_face->GetPiece(0, 2));
+			left_m = reinterpret_cast<EdgePiece*>( left_face->GetPiece(1, 2));
+			left_r = reinterpret_cast<CornerPiece*>(left_face->GetPiece(2, 2));
 
-			right_l = right_face->GetPiece(2, 0);
-			right_m = right_face->GetPiece(1, 0);
-			right_r = right_face->GetPiece(0, 0);
+			right_l = reinterpret_cast<CornerPiece*>(right_face->GetPiece(2, 0));
+			right_m = reinterpret_cast<EdgePiece*>( right_face->GetPiece(1, 0));
+			right_r = reinterpret_cast<CornerPiece*>(right_face->GetPiece(0, 0));
 			break;
 		}
 
@@ -745,21 +745,21 @@ void RubiksCube::Move(FaceId id, bool prime)
 			left_face = this->GetFace(FaceId::FRONT);
 			right_face = this->GetFace(FaceId::BACK);
 
-			top_l = top_face->GetPiece(0, 2);
-			top_m = top_face->GetPiece(1, 2);
-			top_r = top_face->GetPiece(2, 2);
+			top_l = reinterpret_cast<CornerPiece*>(top_face->GetPiece(0, 2));
+			top_m = reinterpret_cast<EdgePiece*>( top_face->GetPiece(1, 2));
+			top_r = reinterpret_cast<CornerPiece*>(top_face->GetPiece(2, 2));
 
-			bottom_l = bottom_face->GetPiece(0, 2);
-			bottom_m = bottom_face->GetPiece(1, 2);
-			bottom_r = bottom_face->GetPiece(2, 2);
+			bottom_l = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(0, 2));
+			bottom_m = reinterpret_cast<EdgePiece*>( bottom_face->GetPiece(1, 2));
+			bottom_r = reinterpret_cast<CornerPiece*>(bottom_face->GetPiece(2, 2));
 
-			left_l = left_face->GetPiece(0, 2);
-			left_m = left_face->GetPiece(1, 2);
-			left_r = left_face->GetPiece(2, 2);
+			left_l = reinterpret_cast<CornerPiece*>(left_face->GetPiece(0, 2));
+			left_m = reinterpret_cast<EdgePiece*>( left_face->GetPiece(1, 2));
+			left_r = reinterpret_cast<CornerPiece*>(left_face->GetPiece(2, 2));
 
-			right_l = right_face->GetPiece(2, 0);
-			right_m = right_face->GetPiece(1, 0);
-			right_r = right_face->GetPiece(0, 0);
+			right_l = reinterpret_cast<CornerPiece*>(right_face->GetPiece(2, 0));
+			right_m = reinterpret_cast<EdgePiece*>( right_face->GetPiece(1, 0));
+			right_r = reinterpret_cast<CornerPiece*>(right_face->GetPiece(0, 0));
 			break;
 		}
 	}
@@ -792,67 +792,162 @@ void RubiksCube::Move(FaceId id, bool prime)
 	if (prime)
 	{
 		move_face->GetPiece(0, 0)->SetColor(move_face_tr);
+		reinterpret_cast<CornerPiece*>(move_face->GetPiece(0, 0))->SetOtherColors(right_r_color, top_l_color);
 		move_face->GetPiece(0, 1)->SetColor(move_face_mr);
+		reinterpret_cast<EdgePiece*>(move_face->GetPiece(0, 1))->SetOtherColor(right_m_color);
 		move_face->GetPiece(0, 2)->SetColor(move_face_br);
+		reinterpret_cast<CornerPiece*>(move_face->GetPiece(0, 2))->SetOtherColors(bottom_r_color, right_l_color);
 		move_face->GetPiece(1, 0)->SetColor(move_face_tm);
+		reinterpret_cast<EdgePiece*>(move_face->GetPiece(1, 0))->SetOtherColor(top_m_color);
 		move_face->GetPiece(1, 2)->SetColor(move_face_bm);
+		reinterpret_cast<EdgePiece*>(move_face->GetPiece(1, 2))->SetOtherColor(bottom_m_color);
 		move_face->GetPiece(2, 0)->SetColor(move_face_tl);
+		reinterpret_cast<CornerPiece*>(move_face->GetPiece(2, 0))->SetOtherColors(top_r_color, left_l_color);
 		move_face->GetPiece(2, 1)->SetColor(move_face_ml);
+		reinterpret_cast<EdgePiece*>(move_face->GetPiece(2, 1))->SetOtherColor(left_m_color);
 		move_face->GetPiece(2, 2)->SetColor(move_face_bl);
+		reinterpret_cast<CornerPiece*>(move_face->GetPiece(2, 2))->SetOtherColors(left_r_color, bottom_l_color);
 
 		top_l->SetColor(right_l_color);
+		top_l->SetOtherColors(move_face_br, bottom_r_color);
 		top_m->SetColor(right_m_color);
+		top_m->SetOtherColor(move_face_mr);
 		top_r->SetColor(right_r_color);
+		top_r->SetOtherColors(top_l_color, move_face_tr);
 
 		bottom_l->SetColor(left_l_color);
+		bottom_l->SetOtherColors(move_face_tl, top_r_color);
 		bottom_m->SetColor(left_m_color);
+		bottom_m->SetOtherColor(move_face_ml);
 		bottom_r->SetColor(left_r_color);
+		bottom_r->SetOtherColors(bottom_l_color, move_face_bl);
 
 		left_l->SetColor(top_l_color);
+		left_l->SetOtherColors(move_face_tr, right_r_color);
 		left_m->SetColor(top_m_color);
+		left_m->SetOtherColor(move_face_tm);
 		left_r->SetColor(top_r_color);
+		left_r->SetOtherColors(left_l_color, move_face_tl);
 
 		right_l->SetColor(bottom_l_color);
+		right_l->SetOtherColors(move_face_bl, left_r_color);
 		right_m->SetColor(bottom_m_color);
+		right_m->SetOtherColor(move_face_bm);
 		right_r->SetColor(bottom_r_color);
+		right_r->SetOtherColors(right_l_color, move_face_br);
 	}
 	else
 	{
 		move_face->GetPiece(0, 0)->SetColor(move_face_bl);
+		reinterpret_cast<CornerPiece*>(move_face->GetPiece(0, 0))->SetOtherColors(left_r_color, bottom_l_color);
 		move_face->GetPiece(0, 1)->SetColor(move_face_ml);
+		reinterpret_cast<EdgePiece*>(move_face->GetPiece(0, 1))->SetOtherColor(left_m_color);
 		move_face->GetPiece(0, 2)->SetColor(move_face_tl);
+		reinterpret_cast<CornerPiece*>(move_face->GetPiece(0, 2))->SetOtherColors(top_r_color, left_l_color);
 		move_face->GetPiece(1, 0)->SetColor(move_face_bm);
+		reinterpret_cast<EdgePiece*>(move_face->GetPiece(1, 0))->SetOtherColor(bottom_m_color);
 		move_face->GetPiece(1, 2)->SetColor(move_face_tm);
+		reinterpret_cast<EdgePiece*>(move_face->GetPiece(1, 2))->SetOtherColor(top_m_color);
 		move_face->GetPiece(2, 0)->SetColor(move_face_br);
+		reinterpret_cast<CornerPiece*>(move_face->GetPiece(2, 0))->SetOtherColors(bottom_r_color, right_l_color);
 		move_face->GetPiece(2, 1)->SetColor(move_face_mr);
+		reinterpret_cast<EdgePiece*>(move_face->GetPiece(2, 1))->SetOtherColor(right_m_color);
 		move_face->GetPiece(2, 2)->SetColor(move_face_tr);
+		reinterpret_cast<CornerPiece*>(move_face->GetPiece(2, 2))->SetOtherColors(right_r_color, top_l_color);
 
 		top_l->SetColor(left_l_color);
+		top_l->SetOtherColors(move_face_tl, top_r_color);
 		top_m->SetColor(left_m_color);
+		top_m->SetOtherColor(move_face_ml);
 		top_r->SetColor(left_r_color);
+		top_r->SetOtherColors(bottom_l_color, move_face_bl);
 
 		bottom_l->SetColor(right_l_color);
+		bottom_l->SetOtherColors(move_face_br, bottom_r_color);
 		bottom_m->SetColor(right_m_color);
+		bottom_m->SetOtherColor(move_face_mr);
 		bottom_r->SetColor(right_r_color);
+		bottom_r->SetOtherColors(top_l_color, move_face_tr);
 
 		left_l->SetColor(bottom_l_color);
+		left_l->SetOtherColors(move_face_bl, left_r_color);
 		left_m->SetColor(bottom_m_color);
+		left_m->SetOtherColor(move_face_bm);
 		left_r->SetColor(bottom_r_color);
+		left_r->SetOtherColors(right_l_color, move_face_br);
 
 		right_l->SetColor(top_l_color);
+		right_l->SetOtherColors(move_face_tr, right_r_color);
 		right_m->SetColor(top_m_color);
+		right_m->SetOtherColor(move_face_tm);
 		right_r->SetColor(top_r_color);
+		right_r->SetOtherColors(left_l_color, move_face_tl);
 	}
 
 	this->moves.emplace_back(id, prime);
 }
 
-void RubiksCube::PrintMoves()
+void RubiksCube::PrintMoves(const bool reverse)
 {
-	for (auto& move : this->moves)
+	if (reverse)
 	{
-		switch (move.first)
+		for (int i = static_cast<int>(this->moves.size()) - 1; i >= 0; i--)
 		{
+			const auto& move = this->moves.at(i);
+
+			switch (move.first)
+			{
+				case FaceId::UP:
+				{
+					printf("U");
+					break;
+				}
+
+				case FaceId::DOWN:
+				{
+					printf("D");
+					break;
+				}
+
+				case FaceId::FRONT:
+				{
+					printf("F");
+					break;
+				}
+
+				case FaceId::BACK:
+				{
+					printf("B");
+					break;
+				}
+
+				case FaceId::LEFT:
+				{
+					printf("L");
+					break;
+				}
+
+				case FaceId::RIGHT:
+				{
+					printf("R");
+					break;
+				}
+			}
+
+			if (!move.second)
+			{
+				printf("'");
+			}
+
+			printf(" ");
+		}
+	}
+	else
+	{
+		for (const auto& move : this->moves)
+		{
+			switch (move.first)
+			{
 			case FaceId::UP:
 			{
 				printf("U");
@@ -888,14 +983,15 @@ void RubiksCube::PrintMoves()
 				printf("R");
 				break;
 			}
-		}
+			}
 
-		if (move.second)
-		{
-			printf("'");
-		}
+			if (move.second)
+			{
+				printf("'");
+			}
 
-		printf(" ");
+			printf(" ");
+		}
 	}
 
 	printf("\n\n");
@@ -926,28 +1022,185 @@ bool RubiksCube::CrossSolved()
 	return false;
 }
 
+void RubiksCube::SolveCrossEdge(PiecePosition current_position, PiecePosition wanted_position)
+{
+	const auto current_piece = reinterpret_cast<EdgePiece*>(this->GetFace(current_position.face)->GetPiece(current_position.row, current_position.column));
+
+	// Save colors because these will change as we move faces of the cube if we were to just use the piece member functions
+	const auto current_piece_color = current_piece->GetColor();
+	const auto current_piece_other_color = current_piece->GetOtherColor();
+
+	auto current_other_piece_position = this->GetPiecePosition(current_piece_other_color, current_piece_color);
+
+	const auto wanted_piece = reinterpret_cast<EdgePiece*>(this->GetFace(wanted_position.face)->GetPiece(wanted_position.row, wanted_position.column));
+	const auto wanted_other_piece_position = this->GetPiecePosition(wanted_piece->GetOtherColor(), wanted_piece->GetColor());
+
+	// Our goal is to get the wanted piece into the DOWN face
+	if (current_position.face == FaceId::UP)
+	{
+		this->Move(current_other_piece_position.face, false);
+		this->Move(current_other_piece_position.face, false);
+	}
+	else if (current_position.face != FaceId::DOWN) 
+	{
+		if (current_position.column == 0) // Left of face
+		{
+			// Move into bottom
+			this->Move(current_other_piece_position.face, false);
+
+			// Move out of the way
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+
+			// Revert our move
+			this->Move(current_other_piece_position.face, true);
+		}
+		else if (current_position.column == 2) // Right of face
+		{
+			// Move into bottom
+			this->Move(current_other_piece_position.face, true);
+
+			// Move out of the way
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+
+			// Revert our move
+			this->Move(current_other_piece_position.face, false);
+		}
+		else // Center of face
+		{
+			// Move into bottom
+			this->Move(current_position.face, false);
+			current_other_piece_position = this->GetPiecePosition(current_piece_other_color, current_piece_color);
+
+			const auto move_prime = current_other_piece_position.column == 0;
+			this->Move(current_other_piece_position.face, move_prime);
+
+			// Move out of the way
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+
+			// Revert our moves
+			this->Move(current_other_piece_position.face, !move_prime);
+			this->Move(current_position.face, true);
+		}
+	}
+
+	// Re-calc this in-case of any changes as a result of other moves
+	current_other_piece_position = this->GetPiecePosition(current_piece_other_color, current_piece_color);
+
+	// Solve for piece that is in DOWN face
+
+	// Move piece under its desired position
+	if (current_other_piece_position.face == FaceId::FRONT)
+	{
+		if (wanted_other_piece_position.face == FaceId::LEFT)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+		else if (wanted_other_piece_position.face == FaceId::RIGHT)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (wanted_other_piece_position.face == FaceId::BACK)
+		{
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+		}
+	}
+	else if (current_other_piece_position.face == FaceId::BACK)
+	{
+		if (wanted_other_piece_position.face == FaceId::LEFT)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (wanted_other_piece_position.face == FaceId::RIGHT)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+		else if (wanted_other_piece_position.face == FaceId::FRONT)
+		{
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+		}
+	}
+	else if (current_other_piece_position.face == FaceId::LEFT)
+	{
+		if (wanted_other_piece_position.face == FaceId::FRONT)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (wanted_other_piece_position.face == FaceId::BACK)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+		else if (wanted_other_piece_position.face == FaceId::RIGHT)
+		{
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+		}
+	}
+	else if (current_other_piece_position.face == FaceId::RIGHT)
+	{
+		if (wanted_other_piece_position.face == FaceId::FRONT)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+		else if (wanted_other_piece_position.face == FaceId::BACK)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (wanted_other_piece_position.face == FaceId::LEFT)
+		{
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+		}
+	}
+
+	// Move piece up into desired position
+	this->Move(wanted_other_piece_position.face, false);
+	this->Move(wanted_other_piece_position.face, false);
+}
+
 void RubiksCube::SolveCross()
 {
-	const auto solve_edge = [this](PiecePosition current_position, PiecePosition wanted_position)
-	{
-		switch (current_position.face)
-		{
-			case FaceId::UP:
-			{
-
-				break;
-			}
-		}
-	};
+	// Check if already solved
+	if (this->CrossSolved()) return;
 
 	const auto o_edge = this->GetPiecePosition(PieceColor::WHITE, PieceColor::ORANGE);
 
-	solve_edge(o_edge, PiecePosition{ true, FaceId::UP, 0, 1 });
+	this->SolveCrossEdge(o_edge, PiecePosition{ true, FaceId::UP, 0, 1 });
+
+	if (this->CrossSolved()) return;
+
+	const auto r_edge = this->GetPiecePosition(PieceColor::WHITE, PieceColor::RED);
+
+	this->SolveCrossEdge(r_edge, PiecePosition{ true, FaceId::UP, 2, 1 });
+
+	if (this->CrossSolved()) return;
+
+	const auto g_edge = this->GetPiecePosition(PieceColor::WHITE, PieceColor::GREEN);
+
+	this->SolveCrossEdge(g_edge, PiecePosition{ true, FaceId::UP, 1, 0 });
+
+	if (this->CrossSolved()) return;
+
+	const auto b_edge = this->GetPiecePosition(PieceColor::WHITE, PieceColor::BLUE);
+
+	this->SolveCrossEdge(b_edge, PiecePosition{ true, FaceId::UP, 1, 2 });
+
+	if (!this->CrossSolved())
+	{
+		MessageBoxA(nullptr, "Could not solve for cross!", "ERROR", MB_OK);
+		std::quick_exit(1);
+	}
 }
 
 void RubiksCube::Solve()
 {
 	this->SolveCross();
 
-	this->PrintMoves();
+	this->PrintMoves(false);
+
+	this->PrintMoves(true);
 }
