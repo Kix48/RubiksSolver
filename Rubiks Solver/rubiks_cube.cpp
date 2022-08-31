@@ -251,6 +251,47 @@ char CubeFace::GetFaceChar()
 	}
 }
 
+const char* CubeFace::GetFaceColorName()
+{
+	switch (this->id)
+	{
+	case FaceId::UP:
+	{
+		return "WHITE";
+	}
+
+	case FaceId::DOWN:
+	{
+		return "YELLOW";
+	}
+
+	case FaceId::FRONT:
+	{
+		return "RED";
+	}
+
+	case FaceId::BACK:
+	{
+		return "ORANGE";
+	}
+
+	case FaceId::LEFT:
+	{
+		return "GREEN";
+	}
+
+	case FaceId::RIGHT:
+	{
+		return "BLUE";
+	}
+
+	default:
+	{
+		return "?";
+	}
+	}
+}
+
 void CubeFace::SetPiece(int row, int column, CubePiece* new_piece)
 {
 	this->pieces[row][column] = new_piece;
@@ -407,71 +448,183 @@ void RubiksCube::PrintCube()
 
 void RubiksCube::SetupCube()
 {
-	const auto u = this->GetFace(FaceId::UP);
+	const auto load_response = MessageBoxA(nullptr, "Setup", "Would you like to load from cube config?", MB_YESNO);
+
+	if (load_response == IDYES)
+	{
+		this->LoadConfig();
+	}
+	else
+	{
+		for (auto& face : this->faces)
+		{
+			for (int row = 0; row < face->GetDimensions().first; row++)
+			{
+				for (int column = 0; column < face->GetDimensions().second; column++)
+				{
+					
+					printf("Please enter the color for the %s [%d][%d]: ", face->GetFaceColorName(), row, column);
+
+					std::string color = "";
+
+					std::cin >> color;
+
+					if (!strcmp(color.c_str(), "W") || !strcmp(color.c_str(), "w") || !strcmp(color.c_str(), "White") || !strcmp(color.c_str(), "white") || !strcmp(color.c_str(), "WHITE"))
+					{
+						this->initial_cube.push_back(PieceColor::WHITE);
+					}
+					else if (!strcmp(color.c_str(), "Y") || !strcmp(color.c_str(), "y") || !strcmp(color.c_str(), "Yellow") || !strcmp(color.c_str(), "yellow") || !strcmp(color.c_str(), "YELLOW"))
+					{
+						this->initial_cube.push_back(PieceColor::YELLOW);
+					}
+					else if (!strcmp(color.c_str(), "R") || !strcmp(color.c_str(), "r") || !strcmp(color.c_str(), "Red") || !strcmp(color.c_str(), "red") || !strcmp(color.c_str(), "RED"))
+					{
+						this->initial_cube.push_back(PieceColor::RED);
+					}
+					else if (!strcmp(color.c_str(), "O") || !strcmp(color.c_str(), "o") || !strcmp(color.c_str(), "Orange") || !strcmp(color.c_str(), "orange") || !strcmp(color.c_str(), "ORANGE"))
+					{
+						this->initial_cube.push_back(PieceColor::ORANGE);
+					}
+					else if (!strcmp(color.c_str(), "G") || !strcmp(color.c_str(), "g") || !strcmp(color.c_str(), "Green") || !strcmp(color.c_str(), "green") || !strcmp(color.c_str(), "GREEN"))
+					{
+						this->initial_cube.push_back(PieceColor::GREEN);
+					}
+					else if (!strcmp(color.c_str(), "B") || !strcmp(color.c_str(), "b") || !strcmp(color.c_str(), "Blue") || !strcmp(color.c_str(), "blue") || !strcmp(color.c_str(), "BLUE"))
+					{
+						this->initial_cube.push_back(PieceColor::BLUE);
+					}
+				}
+			}
+		}
+	}
+
+	for (int face_id = 0; face_id < 6; face_id++)
+	{
+		const auto face = this->GetFace(static_cast<FaceId>(face_id));
+		for (int row = 0; row < face->GetDimensions().first; row++)
+		{
+			for (int column = 0; column < face->GetDimensions().second; column++)
+			{
+				const auto color = this->initial_cube.at((face_id * 9) + (row * 3) + column);
+
+				if (row == 0)
+				{
+					if (column == 0 || column == 2)
+					{
+						face->SetPiece(row, column, new CornerPiece(color));
+					}
+					else
+					{
+						face->SetPiece(row, column, new EdgePiece(color));
+					}
+				}
+				else if (row == 1)
+				{
+					if (column == 0 || column == 2)
+					{
+						face->SetPiece(row, column, new EdgePiece(color));
+					}
+					else
+					{
+						face->SetPiece(row, column, new MiddlePiece(color));
+					}
+				}
+				else
+				{
+					if (column == 0 || column == 2)
+					{
+						face->SetPiece(row, column, new CornerPiece(color));
+					}
+					else
+					{
+						face->SetPiece(row, column, new EdgePiece(color));
+					}
+				}
+			}
+		}
+	}
+
+	/*const auto u = this->GetFace(FaceId::UP);
 	u->SetPiece(0, 0, new CornerPiece(PieceColor::YELLOW));
-	u->SetPiece(0, 1, new EdgePiece(PieceColor::BLUE));
-	u->SetPiece(0, 2, new CornerPiece(PieceColor::GREEN));
-	u->SetPiece(1, 0, new EdgePiece(PieceColor::GREEN));
+	u->SetPiece(0, 1, new EdgePiece(PieceColor::WHITE));
+	u->SetPiece(0, 2, new CornerPiece(PieceColor::WHITE));
+	u->SetPiece(1, 0, new EdgePiece(PieceColor::RED));
 	u->SetPiece(1, 1, new MiddlePiece(PieceColor::WHITE));
 	u->SetPiece(1, 2, new EdgePiece(PieceColor::BLUE));
-	u->SetPiece(2, 0, new CornerPiece(PieceColor::BLUE));
-	u->SetPiece(2, 1, new EdgePiece(PieceColor::ORANGE));
-	u->SetPiece(2, 2, new CornerPiece(PieceColor::ORANGE));
+	u->SetPiece(2, 0, new CornerPiece(PieceColor::ORANGE));
+	u->SetPiece(2, 1, new EdgePiece(PieceColor::BLUE));
+	u->SetPiece(2, 2, new CornerPiece(PieceColor::YELLOW));
 
 	const auto d = this->GetFace(FaceId::DOWN);
-	d->SetPiece(0, 0, new CornerPiece(PieceColor::YELLOW));
-	d->SetPiece(0, 1, new EdgePiece(PieceColor::BLUE));
-	d->SetPiece(0, 2, new CornerPiece(PieceColor::BLUE));
-	d->SetPiece(1, 0, new EdgePiece(PieceColor::GREEN));
+	d->SetPiece(0, 0, new CornerPiece(PieceColor::GREEN));
+	d->SetPiece(0, 1, new EdgePiece(PieceColor::GREEN));
+	d->SetPiece(0, 2, new CornerPiece(PieceColor::RED));
+	d->SetPiece(1, 0, new EdgePiece(PieceColor::WHITE));
 	d->SetPiece(1, 1, new MiddlePiece(PieceColor::YELLOW));
-	d->SetPiece(1, 2, new EdgePiece(PieceColor::YELLOW));
-	d->SetPiece(2, 0, new CornerPiece(PieceColor::WHITE));
-	d->SetPiece(2, 1, new EdgePiece(PieceColor::WHITE));
-	d->SetPiece(2, 2, new CornerPiece(PieceColor::ORANGE));
+	d->SetPiece(1, 2, new EdgePiece(PieceColor::WHITE));
+	d->SetPiece(2, 0, new CornerPiece(PieceColor::GREEN));
+	d->SetPiece(2, 1, new EdgePiece(PieceColor::RED));
+	d->SetPiece(2, 2, new CornerPiece(PieceColor::WHITE));
 
 	const auto f = this->GetFace(FaceId::FRONT);
-	f->SetPiece(0, 0, new CornerPiece(PieceColor::ORANGE));
-	f->SetPiece(0, 1, new EdgePiece(PieceColor::YELLOW));
-	f->SetPiece(0, 2, new CornerPiece(PieceColor::WHITE));
-	f->SetPiece(1, 0, new EdgePiece(PieceColor::GREEN));
+	f->SetPiece(0, 0, new CornerPiece(PieceColor::BLUE));
+	f->SetPiece(0, 1, new EdgePiece(PieceColor::RED));
+	f->SetPiece(0, 2, new CornerPiece(PieceColor::ORANGE));
+	f->SetPiece(1, 0, new EdgePiece(PieceColor::WHITE));
 	f->SetPiece(1, 1, new MiddlePiece(PieceColor::RED));
-	f->SetPiece(1, 2, new EdgePiece(PieceColor::BLUE));
-	f->SetPiece(2, 0, new CornerPiece(PieceColor::RED));
+	f->SetPiece(1, 2, new EdgePiece(PieceColor::YELLOW));
+	f->SetPiece(2, 0, new CornerPiece(PieceColor::YELLOW));
 	f->SetPiece(2, 1, new EdgePiece(PieceColor::ORANGE));
-	f->SetPiece(2, 2, new CornerPiece(PieceColor::YELLOW));
+	f->SetPiece(2, 2, new CornerPiece(PieceColor::GREEN));
 
 	const auto b = this->GetFace(FaceId::BACK);
-	b->SetPiece(0, 0, new CornerPiece(PieceColor::WHITE));
-	b->SetPiece(0, 1, new EdgePiece(PieceColor::YELLOW));
-	b->SetPiece(0, 2, new CornerPiece(PieceColor::GREEN));
-	b->SetPiece(1, 0, new EdgePiece(PieceColor::ORANGE));
+	b->SetPiece(0, 0, new CornerPiece(PieceColor::GREEN));
+	b->SetPiece(0, 1, new EdgePiece(PieceColor::BLUE));
+	b->SetPiece(0, 2, new CornerPiece(PieceColor::BLUE));
+	b->SetPiece(1, 0, new EdgePiece(PieceColor::BLUE));
 	b->SetPiece(1, 1, new MiddlePiece(PieceColor::ORANGE));
-	b->SetPiece(1, 2, new EdgePiece(PieceColor::WHITE));
-	b->SetPiece(2, 0, new CornerPiece(PieceColor::GREEN));
-	b->SetPiece(2, 1, new EdgePiece(PieceColor::RED));
-	b->SetPiece(2, 2, new CornerPiece(PieceColor::BLUE));
+	b->SetPiece(1, 2, new EdgePiece(PieceColor::ORANGE));
+	b->SetPiece(2, 0, new CornerPiece(PieceColor::RED));
+	b->SetPiece(2, 1, new EdgePiece(PieceColor::YELLOW));
+	b->SetPiece(2, 2, new CornerPiece(PieceColor::YELLOW));
 
 	const auto l = this->GetFace(FaceId::LEFT);
-	l->SetPiece(0, 0, new CornerPiece(PieceColor::ORANGE));
-	l->SetPiece(0, 1, new EdgePiece(PieceColor::WHITE));
-	l->SetPiece(0, 2, new CornerPiece(PieceColor::YELLOW));
-	l->SetPiece(1, 0, new EdgePiece(PieceColor::ORANGE));
+	l->SetPiece(0, 0, new CornerPiece(PieceColor::RED));
+	l->SetPiece(0, 1, new EdgePiece(PieceColor::GREEN));
+	l->SetPiece(0, 2, new CornerPiece(PieceColor::WHITE));
+	l->SetPiece(1, 0, new EdgePiece(PieceColor::YELLOW));
 	l->SetPiece(1, 1, new MiddlePiece(PieceColor::GREEN));
-	l->SetPiece(1, 2, new EdgePiece(PieceColor::RED));
-	l->SetPiece(2, 0, new CornerPiece(PieceColor::RED));
-	l->SetPiece(2, 1, new EdgePiece(PieceColor::YELLOW));
-	l->SetPiece(2, 2, new CornerPiece(PieceColor::GREEN));
+	l->SetPiece(1, 2, new EdgePiece(PieceColor::GREEN));
+	l->SetPiece(2, 0, new CornerPiece(PieceColor::ORANGE));
+	l->SetPiece(2, 1, new EdgePiece(PieceColor::RED));
+	l->SetPiece(2, 2, new CornerPiece(PieceColor::RED));
 
 	const auto r = this->GetFace(FaceId::RIGHT);
 	r->SetPiece(0, 0, new CornerPiece(PieceColor::BLUE));
-	r->SetPiece(0, 1, new EdgePiece(PieceColor::WHITE));
-	r->SetPiece(0, 2, new CornerPiece(PieceColor::RED));
-	r->SetPiece(1, 0, new EdgePiece(PieceColor::RED));
+	r->SetPiece(0, 1, new EdgePiece(PieceColor::ORANGE));
+	r->SetPiece(0, 2, new CornerPiece(PieceColor::ORANGE));
+	r->SetPiece(1, 0, new EdgePiece(PieceColor::GREEN));
 	r->SetPiece(1, 1, new MiddlePiece(PieceColor::BLUE));
-	r->SetPiece(1, 2, new EdgePiece(PieceColor::GREEN));
-	r->SetPiece(2, 0, new CornerPiece(PieceColor::RED));
-	r->SetPiece(2, 1, new EdgePiece(PieceColor::RED));
-	r->SetPiece(2, 2, new CornerPiece(PieceColor::WHITE));
+	r->SetPiece(1, 2, new EdgePiece(PieceColor::YELLOW));
+	r->SetPiece(2, 0, new CornerPiece(PieceColor::WHITE));
+	r->SetPiece(2, 1, new EdgePiece(PieceColor::ORANGE));
+	r->SetPiece(2, 2, new CornerPiece(PieceColor::BLUE));*/
+
+	const auto save_response = MessageBoxA(nullptr, "Setup", "Would you like to save cube config?", MB_YESNO);
+
+	if (save_response == IDYES)
+	{
+		this->SaveConfig();
+	}
+
+	system("cls");
+
+	const auto u = this->GetFace(FaceId::UP);
+	const auto d = this->GetFace(FaceId::DOWN);
+	const auto f = this->GetFace(FaceId::FRONT);
+	const auto b = this->GetFace(FaceId::BACK);
+	const auto l = this->GetFace(FaceId::LEFT);
+	const auto r = this->GetFace(FaceId::RIGHT);
 
 	reinterpret_cast<CornerPiece*>(u->GetPiece(0, 0))->SetOtherColors(b->GetPiece(0, 2)->GetColor(), l->GetPiece(0, 0)->GetColor());
 	reinterpret_cast<EdgePiece*>(u->GetPiece(0, 1))->SetOtherColor(b->GetPiece(0, 1)->GetColor());
@@ -997,26 +1150,61 @@ void RubiksCube::PrintMoves(const bool reverse)
 	printf("\n\n");
 }
 
+bool RubiksCube::SaveConfig()
+{
+	std::ofstream output;
+	output.open("cube_config.txt");
+
+	if (!output.is_open()) return false;
+
+	for (auto& face : this->faces)
+	{
+		for (int row = 0; row < face->GetDimensions().first; row++)
+		{
+			for (int column = 0; column < face->GetDimensions().second; column++)
+			{
+				const auto piece = face->GetPiece(row, column);
+
+				output << piece->GetColorChar() << std::endl;
+			}
+		}
+	}
+
+	output.close();
+
+	return true;
+}
+
+bool RubiksCube::LoadConfig()
+{
+	std::ifstream input;
+	input.open("cube_config.txt");
+
+	if (!input.is_open()) return false;
+
+	std::string content = "";
+	while (std::getline(input, content))
+	{
+		printf("%s\n", content);
+	}
+
+	return true;
+}
+
 bool RubiksCube::CrossSolved()
 {
 	const auto white_face = this->GetFace(FaceColor::WHITE);
-	const auto red_face = this->GetFace(FaceColor::RED);
-	const auto blue_face = this->GetFace(FaceColor::BLUE);
-	const auto orange_face = this->GetFace(FaceColor::ORANGE);
-	const auto green_face = this->GetFace(FaceColor::GREEN);
+	const auto wr = reinterpret_cast<EdgePiece*>(white_face->GetPiece(2, 1));
+	const auto wo = reinterpret_cast<EdgePiece*>(white_face->GetPiece(0, 1));
+	const auto wg = reinterpret_cast<EdgePiece*>(white_face->GetPiece(1, 0));
+	const auto wb = reinterpret_cast<EdgePiece*>(white_face->GetPiece(1, 2));
 
-	if (white_face->GetPiece(0, 1)->GetColor() == PieceColor::WHITE
-		&& white_face->GetPiece(1, 0)->GetColor() == PieceColor::WHITE
-		&& white_face->GetPiece(1, 2)->GetColor() == PieceColor::WHITE
-		&& white_face->GetPiece(2, 1)->GetColor() == PieceColor::WHITE)
+	if (wr->GetColor() == PieceColor::WHITE && wr->GetOtherColor() == PieceColor::RED
+		&& wo->GetColor() == PieceColor::WHITE && wo->GetOtherColor() == PieceColor::ORANGE
+		&& wg->GetColor() == PieceColor::WHITE && wg->GetOtherColor() == PieceColor::GREEN
+		&& wb->GetColor() == PieceColor::WHITE && wb->GetOtherColor() == PieceColor::BLUE)
 	{
-		if (red_face->GetPiece(0, 1)->GetColor() == PieceColor::RED
-			&& blue_face->GetPiece(0, 1)->GetColor() == PieceColor::BLUE
-			&& orange_face->GetPiece(0, 1)->GetColor() == PieceColor::ORANGE
-			&& green_face->GetPiece(0, 1)->GetColor() == PieceColor::GREEN)
-		{
-			return true;
-		}
+		return true;
 	}
 
 	return false;
@@ -1024,6 +1212,8 @@ bool RubiksCube::CrossSolved()
 
 void RubiksCube::SolveCrossEdge(PiecePosition current_position, PiecePosition wanted_position)
 {
+	if (current_position == wanted_position) return;
+
 	const auto current_piece = reinterpret_cast<EdgePiece*>(this->GetFace(current_position.face)->GetPiece(current_position.row, current_position.column));
 
 	// Save colors because these will change as we move faces of the cube if we were to just use the piece member functions
@@ -1132,29 +1322,29 @@ void RubiksCube::SolveCrossEdge(PiecePosition current_position, PiecePosition wa
 		}
 		else if (wanted_other_piece_position.face == FaceId::BACK)
 		{
-			this->Move(FaceId::DOWN, true);
+		this->Move(FaceId::DOWN, true);
 		}
 		else if (wanted_other_piece_position.face == FaceId::RIGHT)
 		{
-			this->Move(FaceId::DOWN, false);
-			this->Move(FaceId::DOWN, false);
+		this->Move(FaceId::DOWN, false);
+		this->Move(FaceId::DOWN, false);
 		}
 	}
 	else if (current_other_piece_position.face == FaceId::RIGHT)
 	{
-		if (wanted_other_piece_position.face == FaceId::FRONT)
-		{
-			this->Move(FaceId::DOWN, true);
-		}
-		else if (wanted_other_piece_position.face == FaceId::BACK)
-		{
-			this->Move(FaceId::DOWN, false);
-		}
-		else if (wanted_other_piece_position.face == FaceId::LEFT)
-		{
-			this->Move(FaceId::DOWN, false);
-			this->Move(FaceId::DOWN, false);
-		}
+	if (wanted_other_piece_position.face == FaceId::FRONT)
+	{
+		this->Move(FaceId::DOWN, true);
+	}
+	else if (wanted_other_piece_position.face == FaceId::BACK)
+	{
+		this->Move(FaceId::DOWN, false);
+	}
+	else if (wanted_other_piece_position.face == FaceId::LEFT)
+	{
+		this->Move(FaceId::DOWN, false);
+		this->Move(FaceId::DOWN, false);
+	}
 	}
 
 	// Move piece up into desired position
@@ -1196,11 +1386,359 @@ void RubiksCube::SolveCross()
 	}
 }
 
+bool RubiksCube::FirstCornersSolved()
+{
+	const auto white_face = this->GetFace(FaceColor::WHITE);
+	const auto wog = reinterpret_cast<CornerPiece*>(white_face->GetPiece(0, 0));
+	const auto wbo = reinterpret_cast<CornerPiece*>(white_face->GetPiece(0, 2));
+	const auto wgr = reinterpret_cast<CornerPiece*>(white_face->GetPiece(2, 0));
+	const auto wrb = reinterpret_cast<CornerPiece*>(white_face->GetPiece(0, 2));
+
+	if (wog->GetColor() == PieceColor::WHITE && wog->GetOtherColorLeft() == PieceColor::ORANGE && wog->GetOtherColorRight() == PieceColor::GREEN
+		&& wbo->GetColor() == PieceColor::WHITE && wbo->GetOtherColorLeft() == PieceColor::BLUE && wbo->GetOtherColorRight() == PieceColor::ORANGE
+		&& wgr->GetColor() == PieceColor::WHITE && wgr->GetOtherColorLeft() == PieceColor::GREEN && wgr->GetOtherColorRight() == PieceColor::RED
+		&& wrb->GetColor() == PieceColor::WHITE && wrb->GetOtherColorLeft() == PieceColor::RED && wrb->GetOtherColorRight() == PieceColor::BLUE)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void RubiksCube::SolveFirstCorner(PiecePosition current_position, PiecePosition wanted_position)
+{
+	if (current_position == wanted_position) return;
+
+	const auto current_piece = reinterpret_cast<CornerPiece*>(this->GetFace(current_position.face)->GetPiece(current_position.row, current_position.column));
+	const auto wanted_piece = reinterpret_cast<CornerPiece*>(this->GetFace(wanted_position.face)->GetPiece(wanted_position.row, wanted_position.column));
+
+	// Save colors because these will change as we move faces of the cube if we were to just use the piece member functions
+	const auto current_piece_color = current_piece->GetColor();
+	const auto current_piece_other_color_left = current_piece->GetOtherColorLeft();
+	const auto current_piece_other_color_right = current_piece->GetOtherColorRight();
+
+	const auto wanted_piece_color = wanted_piece->GetColor();
+	const auto wanted_piece_other_color_left = wanted_piece->GetOtherColorLeft();
+	const auto wanted_piece_other_color_right = wanted_piece->GetOtherColorRight();
+
+	// Do we need to move down
+	if (current_position.face == FaceId::UP)
+	{
+		const auto right_piece_position = this->GetPiecePosition(current_piece_other_color_right, current_piece_color, current_piece_other_color_left);
+
+		this->Move(right_piece_position.face, true);
+		this->Move(FaceId::DOWN, true);
+		this->Move(right_piece_position.face, false);
+		this->Move(FaceId::DOWN, false);
+	}
+	else if ((current_position.face == FaceId::FRONT || current_position.face == FaceId::BACK || current_position.face == FaceId::LEFT || current_position.face == FaceId::RIGHT) && current_position.row == 0)
+	{
+		if (current_position.column == 0)
+		{
+			this->Move(current_position.face, true);
+			this->Move(FaceId::DOWN, true);
+			this->Move(current_position.face, false);
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (current_position.column == 2)
+		{
+			const auto left_piece_position = this->GetPiecePosition(current_piece_other_color_left, current_piece_other_color_right, current_piece_color);
+
+			this->Move(left_piece_position.face, true);
+			this->Move(FaceId::DOWN, true);
+			this->Move(left_piece_position.face, false);
+			this->Move(FaceId::DOWN, false);
+		}
+	}
+
+	// Move under wanted corner position
+	current_position = this->GetPiecePosition(current_piece_color, current_piece_other_color_left, current_piece_other_color_right);
+
+	if (current_position.face == FaceId::DOWN)
+	{
+		// Left side needs to align with right side of wanted corner position
+		const auto left_piece_position = this->GetPiecePosition(current_piece_other_color_left, current_piece_other_color_right, current_piece_color);
+		const auto wanted_right_piece_position = this->GetPiecePosition(wanted_piece_other_color_right, wanted_piece_color, wanted_piece_other_color_left);
+
+		if (left_piece_position.face == FaceId::FRONT)
+		{
+			if (wanted_right_piece_position.face == FaceId::BACK)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::LEFT)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+			else if (wanted_right_piece_position.face == FaceId::RIGHT)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+		}
+		else if (left_piece_position.face == FaceId::BACK)
+		{
+			if (wanted_right_piece_position.face == FaceId::FRONT)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::LEFT)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::RIGHT)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+		}
+		else if (left_piece_position.face == FaceId::LEFT)
+		{
+			if (wanted_right_piece_position.face == FaceId::RIGHT)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::FRONT)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::BACK)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+		}
+		else if (left_piece_position.face == FaceId::RIGHT)
+		{
+			if (wanted_right_piece_position.face == FaceId::LEFT)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::FRONT)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+			else if (wanted_right_piece_position.face == FaceId::BACK)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+		}
+	}
+	else if (current_position.column == 0)
+	{
+		// Current side needs to align with right side of wanted corner position
+		const auto wanted_right_piece_position = this->GetPiecePosition(wanted_piece_other_color_right, wanted_piece_color, wanted_piece_other_color_left);
+
+		if (current_position.face == FaceId::FRONT)
+		{
+			if (wanted_right_piece_position.face == FaceId::BACK)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::LEFT)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+			else if (wanted_right_piece_position.face == FaceId::RIGHT)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+		}
+		else if (current_position.face == FaceId::BACK)
+		{
+			if (wanted_right_piece_position.face == FaceId::FRONT)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::LEFT)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::RIGHT)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+		}
+		else if (current_position.face == FaceId::LEFT)
+		{
+			if (wanted_right_piece_position.face == FaceId::RIGHT)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::FRONT)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::BACK)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+		}
+		else if (current_position.face == FaceId::RIGHT)
+		{
+			if (wanted_right_piece_position.face == FaceId::LEFT)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::FRONT)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+			else if (wanted_right_piece_position.face == FaceId::BACK)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+		}
+	}
+	else if (current_position.column == 2)
+	{
+		// Right side needs to align with right side of wanted corner position
+		const auto right_piece_position = this->GetPiecePosition(current_piece_other_color_right, current_piece_color, current_piece_other_color_right);
+		const auto wanted_right_piece_position = this->GetPiecePosition(wanted_piece_other_color_right, wanted_piece_color, wanted_piece_other_color_left);
+
+		if (right_piece_position.face == FaceId::FRONT)
+		{
+			if (wanted_right_piece_position.face == FaceId::BACK)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::LEFT)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+			else if (wanted_right_piece_position.face == FaceId::RIGHT)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+		}
+		else if (right_piece_position.face == FaceId::BACK)
+		{
+			if (wanted_right_piece_position.face == FaceId::FRONT)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::LEFT)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::RIGHT)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+		}
+		else if (right_piece_position.face == FaceId::LEFT)
+		{
+			if (wanted_right_piece_position.face == FaceId::RIGHT)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::FRONT)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::BACK)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+		}
+		else if (right_piece_position.face == FaceId::RIGHT)
+		{
+			if (wanted_right_piece_position.face == FaceId::LEFT)
+			{
+				this->Move(FaceId::DOWN, false);
+				this->Move(FaceId::DOWN, false);
+			}
+			else if (wanted_right_piece_position.face == FaceId::FRONT)
+			{
+				this->Move(FaceId::DOWN, true);
+			}
+			else if (wanted_right_piece_position.face == FaceId::BACK)
+			{
+				this->Move(FaceId::DOWN, false);
+			}
+		}
+	}
+
+	// Move up into final position
+
+	// There are 6 total outcomes from this algorithm
+	for (int count = 0; count < 6; count++)
+	{
+		// We can cast to FaceId because these enums line up
+		this->Move(static_cast<FaceId>(current_piece_other_color_right), true);
+		this->Move(FaceId::DOWN, true);
+		this->Move(static_cast<FaceId>(current_piece_other_color_right), false);
+		this->Move(FaceId::DOWN, false);
+
+		// Solved the corner!
+		current_position = this->GetPiecePosition(current_piece_color, current_piece_other_color_left, current_piece_other_color_right);
+		if (current_position == wanted_position) break;
+	}
+}
+
+void RubiksCube::SolveFirstCorners()
+{
+	// Check if already solved
+	if (this->FirstCornersSolved()) return;
+
+	const auto og_corner = this->GetPiecePosition(PieceColor::WHITE, PieceColor::ORANGE, PieceColor::GREEN);
+
+	this->SolveFirstCorner(og_corner, PiecePosition{ true, FaceId::UP, 0, 0 });
+
+	if (this->FirstCornersSolved()) return;
+
+	this->PrintMoves(false);
+
+	MessageBoxA(nullptr, "Break", "OG Finished", MB_OK);
+
+	const auto bo_corner = this->GetPiecePosition(PieceColor::WHITE, PieceColor::BLUE, PieceColor::ORANGE);
+
+	this->SolveFirstCorner(bo_corner, PiecePosition{ true, FaceId::UP, 0, 2 });
+
+	if (this->FirstCornersSolved()) return;
+
+	this->PrintMoves(false);
+
+	MessageBoxA(nullptr, "Break", "BO Finished", MB_OK);
+
+	//const auto gr_corner = this->GetPiecePosition(PieceColor::WHITE, PieceColor::GREEN, PieceColor::RED);
+
+	//this->SolveFirstCorner(gr_corner, PiecePosition{ true, FaceId::UP, 2, 0 });
+
+	//if (this->FirstCornersSolved()) return;
+
+	//const auto rb_corner = this->GetPiecePosition(PieceColor::WHITE, PieceColor::RED, PieceColor::BLUE);
+
+	//this->SolveFirstCorner(rb_corner, PiecePosition{ true, FaceId::UP, 2, 2 });
+
+	//if (!this->FirstCornersSolved())
+	//{
+	//	MessageBoxA(nullptr, "Could not solve for first corners!", "ERROR", MB_OK);
+	//	std::quick_exit(1);
+	//}
+}
+
 void RubiksCube::Solve()
 {
 	this->SolveCross();
 
 	this->PrintMoves(false);
+
+	MessageBoxA(nullptr, "Step 1", "Cross completed!", MB_OK);
+
+	this->SolveFirstCorners();
+
+	this->PrintMoves(false);
+
+	MessageBoxA(nullptr, "Step 2", "First corners completed!", MB_OK);
 
 	this->PrintMoves(true);
 }

@@ -3,15 +3,17 @@
 #include <Windows.h>
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <sstream>
 
 enum class PieceColor
 {
 	WHITE,
 	YELLOW,
 	RED,
-	BLUE,
 	ORANGE,
-	GREEN
+	GREEN,
+	BLUE
 };
 
 enum class PieceType
@@ -47,6 +49,16 @@ struct PiecePosition
 	FaceId face;
 	int row;
 	int column;
+
+	bool operator==(PiecePosition other)
+	{
+		return ((this->face == other.face) && (this->row == other.row) && (this->column == other.column));
+	}
+
+	bool operator!=(PiecePosition other)
+	{
+		return ((this->face != other.face) || (this->row != other.row) || (this->column != other.column));
+	}
 };
 
 class CubePiece
@@ -124,6 +136,7 @@ public:
 	FaceId GetFaceId();
 	void SetFaceId(FaceId new_id);
 	char GetFaceChar();
+	const char* GetFaceColorName();
 	void SetPiece(int row, int column, CubePiece* new_piece);
 	CubePiece* GetPiece(int row, int column);
 };
@@ -132,6 +145,7 @@ class RubiksCube
 {
 	CubeFace* faces[6];
 	std::vector<std::pair<FaceId, bool>> moves;
+	std::vector<PieceColor> initial_cube;
 
 public:
 	RubiksCube();
@@ -151,10 +165,18 @@ public:
 	void Move(FaceId id, bool prime);
 	void PrintMoves(const bool reverse);
 
+	// Config functions
+	bool SaveConfig();
+	bool LoadConfig();
+
 	// Solving functions
 	bool CrossSolved();
 	void SolveCrossEdge(PiecePosition current_position, PiecePosition wanted_position);
 	void SolveCross();
+
+	bool FirstCornersSolved();
+	void SolveFirstCorner(PiecePosition current_position, PiecePosition wanted_position);
+	void SolveFirstCorners();
 
 	void Solve();
 };
