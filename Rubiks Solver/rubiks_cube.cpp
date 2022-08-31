@@ -448,14 +448,16 @@ void RubiksCube::PrintCube()
 
 void RubiksCube::SetupCube()
 {
-	const auto load_response = MessageBoxA(nullptr, "Setup", "Would you like to load from cube config?", MB_YESNO);
+	const auto load_response = MessageBoxA(nullptr, "Would you like to load from cube config?", "Setup", MB_YESNO);
 
+	bool ask_for_save = false;
 	if (load_response == IDYES)
 	{
 		this->LoadConfig();
 	}
 	else
 	{
+		ask_for_save = true;
 		for (auto& face : this->faces)
 		{
 			for (int row = 0; row < face->GetDimensions().first; row++)
@@ -465,7 +467,7 @@ void RubiksCube::SetupCube()
 					
 					printf("Please enter the color for the %s [%d][%d]: ", face->GetFaceColorName(), row, column);
 
-					std::string color = "";
+					std::string color;
 
 					std::cin >> color;
 
@@ -544,6 +546,16 @@ void RubiksCube::SetupCube()
 		}
 	}
 
+	if (ask_for_save)
+	{
+		const auto save_response = MessageBoxA(nullptr, "Would you like to save cube config?", "Setup", MB_YESNO);
+
+		if (save_response == IDYES)
+		{
+			this->SaveConfig();
+		}
+	}
+
 	/*const auto u = this->GetFace(FaceId::UP);
 	u->SetPiece(0, 0, new CornerPiece(PieceColor::YELLOW));
 	u->SetPiece(0, 1, new EdgePiece(PieceColor::WHITE));
@@ -609,13 +621,6 @@ void RubiksCube::SetupCube()
 	r->SetPiece(2, 0, new CornerPiece(PieceColor::WHITE));
 	r->SetPiece(2, 1, new EdgePiece(PieceColor::ORANGE));
 	r->SetPiece(2, 2, new CornerPiece(PieceColor::BLUE));*/
-
-	const auto save_response = MessageBoxA(nullptr, "Setup", "Would you like to save cube config?", MB_YESNO);
-
-	if (save_response == IDYES)
-	{
-		this->SaveConfig();
-	}
 
 	system("cls");
 
@@ -1182,10 +1187,35 @@ bool RubiksCube::LoadConfig()
 
 	if (!input.is_open()) return false;
 
-	std::string content = "";
-	while (std::getline(input, content))
+	std::string color;
+	while (input)
 	{
-		printf("%s\n", content);
+		std::getline(input, color);
+
+		if (!strcmp(color.c_str(), "W") || !strcmp(color.c_str(), "w") || !strcmp(color.c_str(), "White") || !strcmp(color.c_str(), "white") || !strcmp(color.c_str(), "WHITE"))
+		{
+			this->initial_cube.push_back(PieceColor::WHITE);
+		}
+		else if (!strcmp(color.c_str(), "Y") || !strcmp(color.c_str(), "y") || !strcmp(color.c_str(), "Yellow") || !strcmp(color.c_str(), "yellow") || !strcmp(color.c_str(), "YELLOW"))
+		{
+			this->initial_cube.push_back(PieceColor::YELLOW);
+		}
+		else if (!strcmp(color.c_str(), "R") || !strcmp(color.c_str(), "r") || !strcmp(color.c_str(), "Red") || !strcmp(color.c_str(), "red") || !strcmp(color.c_str(), "RED"))
+		{
+			this->initial_cube.push_back(PieceColor::RED);
+		}
+		else if (!strcmp(color.c_str(), "O") || !strcmp(color.c_str(), "o") || !strcmp(color.c_str(), "Orange") || !strcmp(color.c_str(), "orange") || !strcmp(color.c_str(), "ORANGE"))
+		{
+			this->initial_cube.push_back(PieceColor::ORANGE);
+		}
+		else if (!strcmp(color.c_str(), "G") || !strcmp(color.c_str(), "g") || !strcmp(color.c_str(), "Green") || !strcmp(color.c_str(), "green") || !strcmp(color.c_str(), "GREEN"))
+		{
+			this->initial_cube.push_back(PieceColor::GREEN);
+		}
+		else if (!strcmp(color.c_str(), "B") || !strcmp(color.c_str(), "b") || !strcmp(color.c_str(), "Blue") || !strcmp(color.c_str(), "blue") || !strcmp(color.c_str(), "BLUE"))
+		{
+			this->initial_cube.push_back(PieceColor::BLUE);
+		}
 	}
 
 	return true;
@@ -1392,7 +1422,7 @@ bool RubiksCube::FirstCornersSolved()
 	const auto wog = reinterpret_cast<CornerPiece*>(white_face->GetPiece(0, 0));
 	const auto wbo = reinterpret_cast<CornerPiece*>(white_face->GetPiece(0, 2));
 	const auto wgr = reinterpret_cast<CornerPiece*>(white_face->GetPiece(2, 0));
-	const auto wrb = reinterpret_cast<CornerPiece*>(white_face->GetPiece(0, 2));
+	const auto wrb = reinterpret_cast<CornerPiece*>(white_face->GetPiece(2, 2));
 
 	if (wog->GetColor() == PieceColor::WHITE && wog->GetOtherColorLeft() == PieceColor::ORANGE && wog->GetOtherColorRight() == PieceColor::GREEN
 		&& wbo->GetColor() == PieceColor::WHITE && wbo->GetOtherColorLeft() == PieceColor::BLUE && wbo->GetOtherColorRight() == PieceColor::ORANGE
@@ -1695,35 +1725,27 @@ void RubiksCube::SolveFirstCorners()
 
 	if (this->FirstCornersSolved()) return;
 
-	this->PrintMoves(false);
-
-	MessageBoxA(nullptr, "Break", "OG Finished", MB_OK);
-
 	const auto bo_corner = this->GetPiecePosition(PieceColor::WHITE, PieceColor::BLUE, PieceColor::ORANGE);
 
 	this->SolveFirstCorner(bo_corner, PiecePosition{ true, FaceId::UP, 0, 2 });
 
 	if (this->FirstCornersSolved()) return;
 
-	this->PrintMoves(false);
+	const auto gr_corner = this->GetPiecePosition(PieceColor::WHITE, PieceColor::GREEN, PieceColor::RED);
 
-	MessageBoxA(nullptr, "Break", "BO Finished", MB_OK);
+	this->SolveFirstCorner(gr_corner, PiecePosition{ true, FaceId::UP, 2, 0 });
 
-	//const auto gr_corner = this->GetPiecePosition(PieceColor::WHITE, PieceColor::GREEN, PieceColor::RED);
+	if (this->FirstCornersSolved()) return;
 
-	//this->SolveFirstCorner(gr_corner, PiecePosition{ true, FaceId::UP, 2, 0 });
+	const auto rb_corner = this->GetPiecePosition(PieceColor::WHITE, PieceColor::RED, PieceColor::BLUE);
 
-	//if (this->FirstCornersSolved()) return;
+	this->SolveFirstCorner(rb_corner, PiecePosition{ true, FaceId::UP, 2, 2 });
 
-	//const auto rb_corner = this->GetPiecePosition(PieceColor::WHITE, PieceColor::RED, PieceColor::BLUE);
-
-	//this->SolveFirstCorner(rb_corner, PiecePosition{ true, FaceId::UP, 2, 2 });
-
-	//if (!this->FirstCornersSolved())
-	//{
-	//	MessageBoxA(nullptr, "Could not solve for first corners!", "ERROR", MB_OK);
-	//	std::quick_exit(1);
-	//}
+	if (!this->FirstCornersSolved())
+	{
+		MessageBoxA(nullptr, "Could not solve for first corners!", "ERROR", MB_OK);
+		std::quick_exit(1);
+	}
 }
 
 void RubiksCube::Solve()
@@ -1732,13 +1754,13 @@ void RubiksCube::Solve()
 
 	this->PrintMoves(false);
 
-	MessageBoxA(nullptr, "Step 1", "Cross completed!", MB_OK);
+	MessageBoxA(nullptr, "Cross completed!", "Step 1", MB_OK);
 
 	this->SolveFirstCorners();
 
 	this->PrintMoves(false);
 
-	MessageBoxA(nullptr, "Step 2", "First corners completed!", MB_OK);
+	MessageBoxA(nullptr, "First corners completed!", "Step 2", MB_OK);
 
 	this->PrintMoves(true);
-}
+} 
