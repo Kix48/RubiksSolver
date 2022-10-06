@@ -178,5 +178,9 @@ public:
 	void SolveFirstCorner(PiecePosition current_position, PiecePosition wanted_position);
 	void SolveFirstCorners();
 
+	bool MiddleEdgesSolved();
+	void SolveMiddleEdge(PiecePosition current_position, PiecePosition wanted_position);
+	void SolveMiddleEdges();
+
 	void Solve();
 };

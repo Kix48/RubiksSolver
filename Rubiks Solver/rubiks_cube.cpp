@@ -1748,6 +1748,210 @@ void RubiksCube::SolveFirstCorners()
 	}
 }
 
+bool RubiksCube::MiddleEdgesSolved()
+{
+	const auto front = this->GetFace(FaceId::FRONT);
+	const auto back = this->GetFace(FaceId::BACK);
+
+	const auto fl = reinterpret_cast<EdgePiece*>(front->GetPiece(1, 0));
+	const auto fr = reinterpret_cast<EdgePiece*>(front->GetPiece(1, 2));
+
+	const auto bl = reinterpret_cast<EdgePiece*>(back->GetPiece(1, 0));
+	const auto br = reinterpret_cast<EdgePiece*>(back->GetPiece(1, 2));
+
+	if (fl->GetColor() == PieceColor::RED && fl->GetOtherColor() == PieceColor::GREEN 
+		&& fr->GetColor() == PieceColor::RED && fr->GetOtherColor() == PieceColor::BLUE
+		&& bl->GetColor() == PieceColor::ORANGE && bl->GetOtherColor() == PieceColor::BLUE
+		&& br->GetColor() == PieceColor::ORANGE && br->GetOtherColor() == PieceColor::GREEN)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void RubiksCube::SolveMiddleEdge(PiecePosition current_position, PiecePosition wanted_position)
+{
+	// (Left) U' L' U L U F U' F' (Right) U R U' R' U' F' U F
+
+	if (current_position == wanted_position) return;
+
+	const auto current_piece = reinterpret_cast<EdgePiece*>(this->GetFace(current_position.face)->GetPiece(current_position.row, current_position.column));
+	const auto current_piece_color = current_piece->GetColor();
+	const auto current_piece_other_color = current_piece->GetOtherColor();
+
+	// Check if current position is in a middle edge piece position
+	if (current_position.face != FaceId::DOWN && current_position.row == 1)
+	{
+		const auto current_face = current_position.face;
+
+		const auto other_piece_position = this->GetPiecePosition(current_piece_other_color, current_piece_color);
+		const auto other_face = other_piece_position.face;
+
+		const bool use_left = current_position.column == 0;
+
+		this->Move(FaceId::DOWN, true);
+		this->Move(use_left ? current_face : other_face, true);
+		this->Move(FaceId::DOWN, false);
+		this->Move(use_left ? current_face : other_face, false);
+		this->Move(FaceId::DOWN, false);
+		this->Move(use_left ? other_face : current_face, false);
+		this->Move(FaceId::DOWN, true);
+		this->Move(use_left ? other_face : current_face, true);
+	}
+
+	// Figure out which side is on the bottom and which one is facing outwards to be used for alignment
+	auto solve_piece_position = this->GetPiecePosition(current_piece_color, current_piece_other_color);
+	auto align_face = static_cast<FaceId>(current_piece_color);
+
+	if (solve_piece_position.face == FaceId::DOWN)
+	{
+		solve_piece_position = this->GetPiecePosition(current_piece_other_color, current_piece_color);
+		align_face = static_cast<FaceId>(current_piece_other_color);
+	}
+
+	// Align with correct side
+	if (solve_piece_position.face == FaceId::FRONT)
+	{
+		if (align_face == FaceId::BACK)
+		{
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (align_face == FaceId::LEFT)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+		else if (align_face == FaceId::RIGHT)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+	}
+	else if (solve_piece_position.face == FaceId::BACK)
+	{
+		if (align_face == FaceId::FRONT)
+		{
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (align_face == FaceId::LEFT)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (align_face == FaceId::RIGHT)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+	}
+	else if (solve_piece_position.face == FaceId::LEFT)
+	{
+		if (align_face == FaceId::RIGHT)
+		{
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (align_face == FaceId::FRONT)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (align_face == FaceId::BACK)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+	}
+	else if (solve_piece_position.face == FaceId::RIGHT)
+	{
+		if (align_face == FaceId::LEFT)
+		{
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (align_face == FaceId::FRONT)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+		else if (align_face == FaceId::BACK)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+	}
+
+	bool invert_algorithm = false;
+
+	auto wanted_piece = reinterpret_cast<EdgePiece*>(this->GetFace(wanted_position.face)->GetPiece(wanted_position.row, wanted_position.column));
+	auto wanted_piece_color = wanted_piece->GetColor();
+	auto wanted_piece_other_color = wanted_piece->GetOtherColor();
+
+	auto wanted_other_piece_position = this->GetPiecePosition(wanted_piece_other_color, wanted_piece_color);
+	auto move_face = wanted_other_piece_position.face;
+
+	// We know based on if the align face has changed from the og wanted position face
+	if (align_face != wanted_position.face)
+	{
+		if (wanted_position.column == 2)
+		{
+			invert_algorithm = true;
+		}
+
+		wanted_piece = reinterpret_cast<EdgePiece*>(this->GetFace(align_face)->GetPiece(1, wanted_position.column == 0 ? 2 : 0));
+		wanted_piece_color = wanted_piece->GetColor();
+		wanted_piece_other_color = wanted_piece->GetOtherColor();
+
+		wanted_other_piece_position = this->GetPiecePosition(wanted_piece_other_color, wanted_piece_color);
+		move_face = wanted_other_piece_position.face;
+	}
+	else
+	{
+		if (wanted_position.column == 0)
+		{
+			invert_algorithm = true;
+		}
+	}
+
+	this->Move(FaceId::DOWN, !invert_algorithm);
+	this->Move(move_face, !invert_algorithm);
+	this->Move(FaceId::DOWN, invert_algorithm);
+	this->Move(move_face, invert_algorithm);
+	this->Move(FaceId::DOWN, invert_algorithm);
+	this->Move(align_face, invert_algorithm);
+	this->Move(FaceId::DOWN, !invert_algorithm);
+	this->Move(align_face, !invert_algorithm);
+}
+
+void RubiksCube::SolveMiddleEdges()
+{
+	// Check if already solved
+	if (this->MiddleEdgesSolved()) return;
+
+	const auto og_edge = this->GetPiecePosition(PieceColor::ORANGE, PieceColor::GREEN);
+
+	this->SolveMiddleEdge(og_edge, PiecePosition{ true, FaceId::BACK, 1, 2 });
+
+	if (this->MiddleEdgesSolved()) return;
+
+	const auto ob_edge = this->GetPiecePosition(PieceColor::ORANGE, PieceColor::BLUE);
+
+	this->SolveMiddleEdge(ob_edge, PiecePosition{ true, FaceId::BACK, 1, 0 });
+
+	if (this->MiddleEdgesSolved()) return;
+
+	const auto rg_edge = this->GetPiecePosition(PieceColor::RED, PieceColor::GREEN);
+
+	this->SolveMiddleEdge(rg_edge, PiecePosition{ true, FaceId::FRONT, 1, 0 });
+
+	if (this->MiddleEdgesSolved()) return;
+
+	const auto rb_edge = this->GetPiecePosition(PieceColor::RED, PieceColor::BLUE);
+
+	this->SolveMiddleEdge(rb_edge, PiecePosition{ true, FaceId::FRONT, 1, 2 });
+
+	if (!this->MiddleEdgesSolved())
+	{
+		MessageBoxA(nullptr, "Could not solve for middle edges!", "ERROR", MB_OK);
+		std::quick_exit(1);
+	}
+}
+
 void RubiksCube::Solve()
 {
 	this->SolveCross();
@@ -1761,6 +1965,12 @@ void RubiksCube::Solve()
 	this->PrintMoves(false);
 
 	MessageBoxA(nullptr, "First corners completed!", "Step 2", MB_OK);
+
+	this->SolveMiddleEdges();
+
+	this->PrintMoves(false);
+
+	MessageBoxA(nullptr, "Middle edges completed!", "Step 3", MB_OK);
 
 	this->PrintMoves(true);
 } 
