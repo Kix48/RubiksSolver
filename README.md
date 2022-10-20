@@ -1,8 +1,6 @@
 # RubiksSolver  
 
-This program outputs the moves to the user that are required to solve a Rubiks Cube (More in-depth below).   
-This is not meant to be the fastest or most efficient way to solve a rubiks cube, but rather, I turned the most basic method into code.  
-This project was created entirely from scratch by me.  
+This program outputs the moves to the user that are required to solve a Rubiks Cube (More in-depth below). This is not meant to be the fastest or most efficient way to solve a rubiks cube, but rather, I turned the most basic method into code. This project was created entirely from scratch by me.  
 
 ## How To Use:
 1. Open program and select whether you would like to load a cube layout from a config file  
