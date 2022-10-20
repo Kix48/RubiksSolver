@@ -4,7 +4,7 @@ This program outputs the moves to the user that are required to solve a Rubiks C
 This is not meant to be the fastest or most efficient way to solve a rubiks cube, but rather, I turned the most basic method into code.  
 This project was created entirely from scratch by me.  
 
-How To Use:
+##How To Use:
 1. Open program and select whether you would like to load a cube layout from a config file  
   a. This step was most useful for the debugging/testing process as I could save my starting layout to test new methods  
   b. The config file must be in the same file as the program and named "cube_config.txt"  
@@ -19,7 +19,7 @@ How To Use:
 4. Hold your cube with Red as the front face and White as the up face when following the output moves.  
 5. If there are any errors when solving, please create an issue and send your cube config along with it. Thanks :)  
 
-How To Read Output:
+##How To Read Output:  
 The output will consist of capitol letters that may have an "'" following them.  
 The letters represent the side of the cube that will be moved. Below are all of them listed:  
 
@@ -35,6 +35,6 @@ What this means is that instead of moving the indicated face CLOCKWISE, you will
 If you are having trouble, flip the cube until you have the indicated face pointed towards you, and then do the CLOCKWISE or COUNTER-CLOCKWISE move.  
 Alternatively, you can use this program along side any basic Rubiks Cube solving video as it follows most of the moves that will be performed in the video.  
 
-Future Ideas:  
+##Future Ideas:  
 - Make some optimizations (Remove moves that cancel each other out)  
 - Add OpenCV  
