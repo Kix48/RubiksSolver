@@ -556,72 +556,6 @@ void RubiksCube::SetupCube()
 		}
 	}
 
-	/*const auto u = this->GetFace(FaceId::UP);
-	u->SetPiece(0, 0, new CornerPiece(PieceColor::YELLOW));
-	u->SetPiece(0, 1, new EdgePiece(PieceColor::WHITE));
-	u->SetPiece(0, 2, new CornerPiece(PieceColor::WHITE));
-	u->SetPiece(1, 0, new EdgePiece(PieceColor::RED));
-	u->SetPiece(1, 1, new MiddlePiece(PieceColor::WHITE));
-	u->SetPiece(1, 2, new EdgePiece(PieceColor::BLUE));
-	u->SetPiece(2, 0, new CornerPiece(PieceColor::ORANGE));
-	u->SetPiece(2, 1, new EdgePiece(PieceColor::BLUE));
-	u->SetPiece(2, 2, new CornerPiece(PieceColor::YELLOW));
-
-	const auto d = this->GetFace(FaceId::DOWN);
-	d->SetPiece(0, 0, new CornerPiece(PieceColor::GREEN));
-	d->SetPiece(0, 1, new EdgePiece(PieceColor::GREEN));
-	d->SetPiece(0, 2, new CornerPiece(PieceColor::RED));
-	d->SetPiece(1, 0, new EdgePiece(PieceColor::WHITE));
-	d->SetPiece(1, 1, new MiddlePiece(PieceColor::YELLOW));
-	d->SetPiece(1, 2, new EdgePiece(PieceColor::WHITE));
-	d->SetPiece(2, 0, new CornerPiece(PieceColor::GREEN));
-	d->SetPiece(2, 1, new EdgePiece(PieceColor::RED));
-	d->SetPiece(2, 2, new CornerPiece(PieceColor::WHITE));
-
-	const auto f = this->GetFace(FaceId::FRONT);
-	f->SetPiece(0, 0, new CornerPiece(PieceColor::BLUE));
-	f->SetPiece(0, 1, new EdgePiece(PieceColor::RED));
-	f->SetPiece(0, 2, new CornerPiece(PieceColor::ORANGE));
-	f->SetPiece(1, 0, new EdgePiece(PieceColor::WHITE));
-	f->SetPiece(1, 1, new MiddlePiece(PieceColor::RED));
-	f->SetPiece(1, 2, new EdgePiece(PieceColor::YELLOW));
-	f->SetPiece(2, 0, new CornerPiece(PieceColor::YELLOW));
-	f->SetPiece(2, 1, new EdgePiece(PieceColor::ORANGE));
-	f->SetPiece(2, 2, new CornerPiece(PieceColor::GREEN));
-
-	const auto b = this->GetFace(FaceId::BACK);
-	b->SetPiece(0, 0, new CornerPiece(PieceColor::GREEN));
-	b->SetPiece(0, 1, new EdgePiece(PieceColor::BLUE));
-	b->SetPiece(0, 2, new CornerPiece(PieceColor::BLUE));
-	b->SetPiece(1, 0, new EdgePiece(PieceColor::BLUE));
-	b->SetPiece(1, 1, new MiddlePiece(PieceColor::ORANGE));
-	b->SetPiece(1, 2, new EdgePiece(PieceColor::ORANGE));
-	b->SetPiece(2, 0, new CornerPiece(PieceColor::RED));
-	b->SetPiece(2, 1, new EdgePiece(PieceColor::YELLOW));
-	b->SetPiece(2, 2, new CornerPiece(PieceColor::YELLOW));
-
-	const auto l = this->GetFace(FaceId::LEFT);
-	l->SetPiece(0, 0, new CornerPiece(PieceColor::RED));
-	l->SetPiece(0, 1, new EdgePiece(PieceColor::GREEN));
-	l->SetPiece(0, 2, new CornerPiece(PieceColor::WHITE));
-	l->SetPiece(1, 0, new EdgePiece(PieceColor::YELLOW));
-	l->SetPiece(1, 1, new MiddlePiece(PieceColor::GREEN));
-	l->SetPiece(1, 2, new EdgePiece(PieceColor::GREEN));
-	l->SetPiece(2, 0, new CornerPiece(PieceColor::ORANGE));
-	l->SetPiece(2, 1, new EdgePiece(PieceColor::RED));
-	l->SetPiece(2, 2, new CornerPiece(PieceColor::RED));
-
-	const auto r = this->GetFace(FaceId::RIGHT);
-	r->SetPiece(0, 0, new CornerPiece(PieceColor::BLUE));
-	r->SetPiece(0, 1, new EdgePiece(PieceColor::ORANGE));
-	r->SetPiece(0, 2, new CornerPiece(PieceColor::ORANGE));
-	r->SetPiece(1, 0, new EdgePiece(PieceColor::GREEN));
-	r->SetPiece(1, 1, new MiddlePiece(PieceColor::BLUE));
-	r->SetPiece(1, 2, new EdgePiece(PieceColor::YELLOW));
-	r->SetPiece(2, 0, new CornerPiece(PieceColor::WHITE));
-	r->SetPiece(2, 1, new EdgePiece(PieceColor::ORANGE));
-	r->SetPiece(2, 2, new CornerPiece(PieceColor::BLUE));*/
-
 	system("cls");
 
 	const auto u = this->GetFace(FaceId::UP);
@@ -1221,7 +1155,7 @@ bool RubiksCube::LoadConfig()
 	return true;
 }
 
-bool RubiksCube::CrossSolved()
+bool RubiksCube::FirstCrossSolved()
 {
 	const auto white_face = this->GetFace(FaceColor::WHITE);
 	const auto wr = reinterpret_cast<EdgePiece*>(white_face->GetPiece(2, 1));
@@ -1240,7 +1174,7 @@ bool RubiksCube::CrossSolved()
 	return false;
 }
 
-void RubiksCube::SolveCrossEdge(PiecePosition current_position, PiecePosition wanted_position)
+void RubiksCube::SolveFirstCrossEdge(PiecePosition current_position, PiecePosition wanted_position)
 {
 	if (current_position == wanted_position) return;
 
@@ -1382,34 +1316,34 @@ void RubiksCube::SolveCrossEdge(PiecePosition current_position, PiecePosition wa
 	this->Move(wanted_other_piece_position.face, false);
 }
 
-void RubiksCube::SolveCross()
+void RubiksCube::SolveFirstCross()
 {
 	// Check if already solved
-	if (this->CrossSolved()) return;
+	if (this->FirstCrossSolved()) return;
 
 	const auto o_edge = this->GetPiecePosition(PieceColor::WHITE, PieceColor::ORANGE);
 
-	this->SolveCrossEdge(o_edge, PiecePosition{ true, FaceId::UP, 0, 1 });
+	this->SolveFirstCrossEdge(o_edge, PiecePosition{ true, FaceId::UP, 0, 1 });
 
-	if (this->CrossSolved()) return;
+	if (this->FirstCrossSolved()) return;
 
 	const auto r_edge = this->GetPiecePosition(PieceColor::WHITE, PieceColor::RED);
 
-	this->SolveCrossEdge(r_edge, PiecePosition{ true, FaceId::UP, 2, 1 });
+	this->SolveFirstCrossEdge(r_edge, PiecePosition{ true, FaceId::UP, 2, 1 });
 
-	if (this->CrossSolved()) return;
+	if (this->FirstCrossSolved()) return;
 
 	const auto g_edge = this->GetPiecePosition(PieceColor::WHITE, PieceColor::GREEN);
 
-	this->SolveCrossEdge(g_edge, PiecePosition{ true, FaceId::UP, 1, 0 });
+	this->SolveFirstCrossEdge(g_edge, PiecePosition{ true, FaceId::UP, 1, 0 });
 
-	if (this->CrossSolved()) return;
+	if (this->FirstCrossSolved()) return;
 
 	const auto b_edge = this->GetPiecePosition(PieceColor::WHITE, PieceColor::BLUE);
 
-	this->SolveCrossEdge(b_edge, PiecePosition{ true, FaceId::UP, 1, 2 });
+	this->SolveFirstCrossEdge(b_edge, PiecePosition{ true, FaceId::UP, 1, 2 });
 
-	if (!this->CrossSolved())
+	if (!this->FirstCrossSolved())
 	{
 		MessageBoxA(nullptr, "Could not solve for cross!", "ERROR", MB_OK);
 		std::quick_exit(1);
@@ -1628,7 +1562,7 @@ void RubiksCube::SolveFirstCorner(PiecePosition current_position, PiecePosition 
 	else if (current_position.column == 2)
 	{
 		// Right side needs to align with right side of wanted corner position
-		const auto right_piece_position = this->GetPiecePosition(current_piece_other_color_right, current_piece_color, current_piece_other_color_right);
+		const auto right_piece_position = this->GetPiecePosition(current_piece_other_color_right, current_piece_color, current_piece_other_color_left);
 		const auto wanted_right_piece_position = this->GetPiecePosition(wanted_piece_other_color_right, wanted_piece_color, wanted_piece_other_color_left);
 
 		if (right_piece_position.face == FaceId::FRONT)
@@ -1952,25 +1886,355 @@ void RubiksCube::SolveMiddleEdges()
 	}
 }
 
+bool RubiksCube::LastCrossSolved()
+{
+	const auto down_face = this->GetFace(FaceId::DOWN);
+
+	const auto top = reinterpret_cast<EdgePiece*>(down_face->GetPiece(0, 1));
+	const auto bottom = reinterpret_cast<EdgePiece*>(down_face->GetPiece(2, 1));
+	const auto left = reinterpret_cast<EdgePiece*>(down_face->GetPiece(1, 0));
+	const auto right = reinterpret_cast<EdgePiece*>(down_face->GetPiece(1, 2));
+
+	if (top->GetColor() == PieceColor::YELLOW && bottom->GetColor() == PieceColor::YELLOW
+		&& left->GetColor() == PieceColor::YELLOW && right->GetColor() == PieceColor::YELLOW)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void RubiksCube::SolveLastCross()
+{
+	// F R U R' U' F'
+
+	if (this->LastCrossSolved()) return;
+
+	for (int counter = 0; counter < 8; counter++)
+	{
+		// Figure out what pattern we have
+
+		const auto down_face = this->GetFace(FaceId::DOWN);
+
+		const auto top = reinterpret_cast<EdgePiece*>(down_face->GetPiece(0, 1));
+		const auto bottom = reinterpret_cast<EdgePiece*>(down_face->GetPiece(2, 1));
+		const auto left = reinterpret_cast<EdgePiece*>(down_face->GetPiece(1, 0));
+		const auto right = reinterpret_cast<EdgePiece*>(down_face->GetPiece(1, 2));
+
+		if (top->GetColor() == PieceColor::YELLOW && left->GetColor() == PieceColor::YELLOW)
+		{
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (top->GetColor() == PieceColor::YELLOW && right->GetColor() == PieceColor::YELLOW)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (bottom->GetColor() == PieceColor::YELLOW && left->GetColor() == PieceColor::YELLOW)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+		else if (top->GetColor() == PieceColor::YELLOW && bottom->GetColor() == PieceColor::YELLOW)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+
+		this->Move(FaceId::FRONT, false);
+		this->Move(FaceId::LEFT, false);
+		this->Move(FaceId::DOWN, false);
+		this->Move(FaceId::LEFT, true);
+		this->Move(FaceId::DOWN, true);
+		this->Move(FaceId::FRONT, true);
+
+		if (this->LastCrossSolved()) break;
+	}
+
+	if (!this->LastCrossSolved())
+	{
+		MessageBoxA(nullptr, "Could not solve for last cross!", "ERROR", MB_OK);
+		std::quick_exit(1);
+	}
+}
+
+bool RubiksCube::LastEdgesSolved()
+{
+	const auto front_face = this->GetFace(FaceId::FRONT);
+	const auto back_face = this->GetFace(FaceId::BACK);
+	const auto left_face = this->GetFace(FaceId::LEFT);
+	const auto right_face = this->GetFace(FaceId::RIGHT);
+
+	const auto front_piece = reinterpret_cast<EdgePiece*>(front_face->GetPiece(2, 1));
+	const auto back_piece = reinterpret_cast<EdgePiece*>(back_face->GetPiece(2, 1));
+	const auto left_piece = reinterpret_cast<EdgePiece*>(left_face->GetPiece(2, 1));
+	const auto right_piece = reinterpret_cast<EdgePiece*>(right_face->GetPiece(2, 1));
+
+	if (front_piece->GetColor() == PieceColor::RED && back_piece->GetColor() == PieceColor::ORANGE
+		&& left_piece->GetColor() == PieceColor::GREEN && right_piece->GetColor() == PieceColor::BLUE)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void RubiksCube::SolveLastEdges()
+{
+	// R U R' U R U2 R' U
+
+	if (this->LastEdgesSolved()) return;
+
+	const auto yr = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::RED);
+	const auto yo = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::ORANGE);
+	const auto yg = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::GREEN);
+	const auto yb = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::BLUE);
+
+	// Quickly check to make sure if all the edges are in the correct places but not turned to their spots
+	// We can do this by checking if opposite edges are correct since at this point either all 4 are correct or 2 are correct but next to each other
+
+	// Don't need to check if it's red/orange combo because then it would be solved and we wouldn't be here
+	if ((yo.row == 0 && yr.row == 2)
+		|| (yg.row == 0 && yb.row == 2)
+		|| (yb.row == 0 && yg.row == 2))
+	{
+		// Just need to turn face until solved
+
+		// Using a for-loop in-case any logic is wrong above and we prevent an infinite loop
+		for (int counter = 0; counter < 4; counter++)
+		{
+			this->Move(FaceId::DOWN, false);
+
+			if (this->LastEdgesSolved()) return;
+		}
+	}
+
+	// Find which edges are next to each other
+	const bool rg_together = ((yr.row == 0 && yg.column == 0) || (yr.column == 2 && yg.row == 0) || (yr.row == 2 && yg.column == 2) || (yr.column == 0 && yg.row == 2));
+	const bool br_together = ((yb.row == 0 && yr.column == 0) || (yb.column == 2 && yr.row == 0) || (yb.row == 2 && yr.column == 2) || (yb.column == 0 && yr.row == 2));
+	const bool ob_together = ((yo.row == 0 && yb.column == 0) || (yo.column == 2 && yb.row == 0) || (yo.row == 2 && yb.column == 2) || (yo.column == 0 && yb.row == 2));
+	const bool go_together = ((yg.row == 0 && yo.column == 0) || (yg.column == 2 && yo.row == 0) || (yg.row == 2 && yo.column == 2) || (yg.column == 0 && yo.row == 2));
+
+	auto move_position = PiecePosition{};
+
+	if (rg_together) move_position = yr;
+	else if (br_together) move_position = yb;
+	else if (ob_together) move_position = yo;
+	else if (go_together) move_position = yg;
+
+
+	if (move_position.valid)
+	{
+		if (move_position.row == 2)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (move_position.column == 2)
+		{
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (move_position.row == 0)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+	}
+
+	this->Move(FaceId::LEFT, false);
+	this->Move(FaceId::DOWN, false);
+	this->Move(FaceId::LEFT, true);
+	this->Move(FaceId::DOWN, false);
+	this->Move(FaceId::LEFT, false);
+	this->Move(FaceId::DOWN, false);
+	this->Move(FaceId::DOWN, false);
+	this->Move(FaceId::LEFT, true);
+	this->Move(FaceId::DOWN, false);
+
+	if (this->LastEdgesSolved()) return;
+
+	// Try to turn until it is solved
+	for (int turns = 0; turns < 3; turns++)
+	{
+		this->Move(FaceId::DOWN, false);
+
+		if (this->LastEdgesSolved()) return;
+	}
+
+	if (!this->LastEdgesSolved())
+	{
+		MessageBoxA(nullptr, "Could not solve for last edges!", "ERROR", MB_OK);
+		std::quick_exit(1);
+	}
+}
+
+bool RubiksCube::LastCornersPositioned()
+{
+	const auto yrg = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::RED, PieceColor::GREEN);
+	const auto ybr = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::BLUE, PieceColor::RED);
+	const auto yob = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::ORANGE, PieceColor::BLUE);
+	const auto ygo = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::GREEN, PieceColor::ORANGE);
+
+	const bool yrg_positioned = ((yrg.face == FaceId::DOWN && yrg.column == 0 && yrg.row == 0) || (yrg.face == FaceId::FRONT && yrg.column == 0) || (yrg.face == FaceId::LEFT && yrg.column == 2));
+	const bool ybr_positioned = ((ybr.face == FaceId::DOWN && ybr.column == 2 && ybr.row == 0) || (ybr.face == FaceId::FRONT && ybr.column == 2) || (ybr.face == FaceId::RIGHT && ybr.column == 0));
+	const bool yob_positioned = ((yob.face == FaceId::DOWN && yob.column == 2 && yob.row == 2) || (yob.face == FaceId::BACK && yob.column == 0) || (yob.face == FaceId::RIGHT && yob.column == 2));
+	const bool ygo_positioned = ((ygo.face == FaceId::DOWN && ygo.column == 0 && ygo.row == 2) || (ygo.face == FaceId::BACK && ygo.column == 2) || (ygo.face == FaceId::LEFT && ygo.column == 0));
+
+	return (yrg_positioned && ybr_positioned && yob_positioned && ygo_positioned);
+}
+
+void RubiksCube::PositionLastCorners()
+{
+	// U R U' L' U R' U' L
+
+	if (this->LastCornersPositioned()) return;
+
+	for (int counter = 0; counter < 8; counter++)
+	{
+		const auto ybr = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::BLUE, PieceColor::RED);
+		const auto yob = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::ORANGE, PieceColor::BLUE);
+		const auto ygo = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::GREEN, PieceColor::ORANGE);
+
+		const bool ybr_positioned = ((ybr.face == FaceId::DOWN && ybr.column == 2 && ybr.row == 0) || (ybr.face == FaceId::FRONT && ybr.column == 2) || (ybr.face == FaceId::RIGHT && ybr.column == 0));
+		const bool yob_positioned = ((yob.face == FaceId::DOWN && yob.column == 2 && yob.row == 2) || (yob.face == FaceId::BACK && yob.column == 0) || (yob.face == FaceId::RIGHT && yob.column == 2));
+		const bool ygo_positioned = ((ygo.face == FaceId::DOWN && ygo.column == 0 && ygo.row == 2) || (ygo.face == FaceId::BACK && ygo.column == 2) || (ygo.face == FaceId::LEFT && ygo.column == 0));
+
+		if (ybr_positioned)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+		else if (yob_positioned)
+		{
+			this->Move(FaceId::DOWN, false);
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (ygo_positioned)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+
+		this->Move(FaceId::DOWN, false);
+		this->Move(FaceId::LEFT, false);
+		this->Move(FaceId::DOWN, true);
+		this->Move(FaceId::RIGHT, true);
+		this->Move(FaceId::DOWN, false);
+		this->Move(FaceId::LEFT, true);
+		this->Move(FaceId::DOWN, true);
+		this->Move(FaceId::RIGHT, false);
+
+		if (ybr_positioned)
+		{
+			this->Move(FaceId::DOWN, false);
+		}
+		else if (yob_positioned)
+		{
+			this->Move(FaceId::DOWN, true);
+			this->Move(FaceId::DOWN, true);
+		}
+		else if (ygo_positioned)
+		{
+			this->Move(FaceId::DOWN, true);
+		}
+
+		if (this->LastCornersPositioned()) break;
+	}
+
+	if (!this->LastCornersPositioned())
+	{
+		MessageBoxA(nullptr, "Could not position last corners!", "ERROR", MB_OK);
+		std::quick_exit(1);
+	}
+}
+
+bool RubiksCube::LastCornersSolved()
+{
+	// Redundant because we could just check if the cube is solved
+	// However, this is faster because we are checking less pieces
+
+	const auto yrg = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::RED, PieceColor::GREEN);
+	const auto ybr = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::BLUE, PieceColor::RED);
+	const auto yob = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::ORANGE, PieceColor::BLUE);
+	const auto ygo = this->GetPiecePosition(PieceColor::YELLOW, PieceColor::GREEN, PieceColor::ORANGE);
+
+	const bool yrg_solved = (yrg.face == FaceId::DOWN && yrg.column == 0 && yrg.row == 0);
+	const bool ybr_solved = (ybr.face == FaceId::DOWN && ybr.column == 2 && ybr.row == 0);
+	const bool yob_solved = (yob.face == FaceId::DOWN && yob.column == 2 && yob.row == 2);
+	const bool ygo_solved = (ygo.face == FaceId::DOWN && ygo.column == 0 && ygo.row == 2);
+
+	return yrg_solved && ybr_solved && yob_solved && ygo_solved;
+}
+
+void RubiksCube::SolveLastCorners()
+{
+	if (this->LastCornersSolved()) return;
+
+	for (int turns = 0; turns < 4; turns++)
+	{
+		for (int counter = 0; counter < 8; counter++)
+		{
+			const auto current_piece = reinterpret_cast<CornerPiece*>(this->GetFace(FaceId::DOWN)->GetPiece(0, 0));
+
+			if (current_piece->GetColor() == PieceColor::YELLOW) break;
+
+			this->Move(FaceId::LEFT, true);
+			this->Move(FaceId::UP, true);
+			this->Move(FaceId::LEFT, false);
+			this->Move(FaceId::UP, false);
+		}
+
+		this->Move(FaceId::DOWN, false);
+	}
+
+	if (!this->LastCornersSolved())
+	{
+		MessageBoxA(nullptr, "Could not solve for last corners!", "ERROR", MB_OK);
+		std::quick_exit(1);
+	}
+}
+
 void RubiksCube::Solve()
 {
-	this->SolveCross();
+	this->SolveFirstCross();
 
-	this->PrintMoves(false);
+	//this->PrintMoves(false);
 
-	MessageBoxA(nullptr, "Cross completed!", "Step 1", MB_OK);
+	//MessageBoxA(nullptr, "Cross completed!", "Step 1", MB_OK);
 
 	this->SolveFirstCorners();
 
-	this->PrintMoves(false);
+	//this->PrintMoves(false);
 
-	MessageBoxA(nullptr, "First corners completed!", "Step 2", MB_OK);
+	//MessageBoxA(nullptr, "First corners completed!", "Step 2", MB_OK);
 
 	this->SolveMiddleEdges();
 
+	//this->PrintMoves(false);
+
+	//MessageBoxA(nullptr, "Middle edges completed!", "Step 3", MB_OK);
+
+	this->SolveLastCross();
+
+	//this->PrintMoves(false);
+
+	//MessageBoxA(nullptr, "Top cross completed!", "Step 4", MB_OK);
+
+	this->SolveLastEdges();
+
+	//this->PrintMoves(false);
+
+	//MessageBoxA(nullptr, "Last edges completed!", "Step 5", MB_OK);
+
+	this->PositionLastCorners();
+
+	//this->PrintMoves(false);
+
+	//MessageBoxA(nullptr, "Last corners positioned!", "Step 6", MB_OK);
+
+	this->SolveLastCorners();
+
+	//this->PrintMoves(false);
+
+	//MessageBoxA(nullptr, "Last corners completed!", "Step 7", MB_OK);
+
 	this->PrintMoves(false);
+	//this->PrintMoves(true);
 
-	MessageBoxA(nullptr, "Middle edges completed!", "Step 3", MB_OK);
-
-	this->PrintMoves(true);
+	MessageBoxA(nullptr, "Cube Solved!!!", "Done", MB_OK);
 } 

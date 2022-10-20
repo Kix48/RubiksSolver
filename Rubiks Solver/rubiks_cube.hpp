@@ -170,9 +170,9 @@ public:
 	bool LoadConfig();
 
 	// Solving functions
-	bool CrossSolved();
-	void SolveCrossEdge(PiecePosition current_position, PiecePosition wanted_position);
-	void SolveCross();
+	bool FirstCrossSolved();
+	void SolveFirstCrossEdge(PiecePosition current_position, PiecePosition wanted_position);
+	void SolveFirstCross();
 
 	bool FirstCornersSolved();
 	void SolveFirstCorner(PiecePosition current_position, PiecePosition wanted_position);
@@ -181,6 +181,18 @@ public:
 	bool MiddleEdgesSolved();
 	void SolveMiddleEdge(PiecePosition current_position, PiecePosition wanted_position);
 	void SolveMiddleEdges();
+
+	bool LastCrossSolved();
+	void SolveLastCross();
+
+	bool LastEdgesSolved();
+	void SolveLastEdges();
+
+	bool LastCornersPositioned();
+	void PositionLastCorners();
+
+	bool LastCornersSolved();
+	void SolveLastCorners();
 
 	void Solve();
 };
