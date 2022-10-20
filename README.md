@@ -28,7 +28,7 @@ B - Back (Orange)
 L - Left (Green)  
 R - Right (Blue)  
 
-If you see an "'" after a letter, it means that the move is "prime".  
+If you see an apostrophe (') after a letter, it means that the move is "prime".  
 What this means is that instead of moving the indicated face CLOCKWISE, you will move it COUNTER-CLOCKWISE.  
 If you are having trouble, flip the cube until you have the indicated face pointed towards you, and then do the CLOCKWISE or COUNTER-CLOCKWISE move.  
 Alternatively, you can use this program along side any basic Rubiks Cube solving video as it follows most of the moves that will be performed in the video.  
